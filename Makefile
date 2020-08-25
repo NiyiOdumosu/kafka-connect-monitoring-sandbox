@@ -107,3 +107,32 @@ ccloud-streams:
 	CCLOUD_SR_API_KEY=${CCLOUD_SR_API_KEY} \
 	CCLOUD_SR_API_SECRET=${CCLOUD_SR_API_SECRET} \
 	./mvnw exec:java -Dexec.mainClass="poc.adapter.Main" -Dconfig.file=src/main/resources/ccloud.conf
+
+perf-topic: ccloud-pre
+	ccloud kafka topic create perf
+
+perf-producer:
+	${CONFLUENT_HOME}/bin/kafka-producer-perf-test \
+		--producer-props bootstrap.servers=${CCLOUD_BOOTSTRAP_SERVERS} \
+		--topic perf \
+		--num-records 100000 --record-size 1000 --throughput -1 \
+		--print-metrics \
+		--producer.config perf/client.properties
+
+perf-consumer:
+	${CONFLUENT_HOME}/bin/kafka-consumer-perf-test \
+		--bootstrap-server ${CCLOUD_BOOTSTRAP_SERVERS} \
+		--topic perf --group g1 \
+		--messages 10000 --threads 10  \
+		--show-detailed-stats \
+		--consumer.config perf/client.properties
+
+#  broker_list topic num_messages producer_acks message_size_bytes
+perf-e2e-latency:
+	${CONFLUENT_HOME}/bin/kafka-run-class kafka.tools.EndToEndLatency \
+		${CCLOUD_BOOTSTRAP_SERVERS} \
+		perf \
+		1000 \
+		all \
+		100 \
+		perf/client.properties

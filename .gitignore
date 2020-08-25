@@ -3,3 +3,4 @@ connector-plugins/
 aws/credentials
 env
 topologies/ccloud.properties
+perf/client.properties
