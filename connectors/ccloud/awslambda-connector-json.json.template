@@ -1,0 +1,34 @@
+{
+  "name": "LambdaSinkConnectorJson",
+  "config" : {
+    "connector.class" : "io.confluent.connect.aws.lambda.AwsLambdaSinkConnector",
+    "tasks.max" : "1",
+
+    "topics" : "aramex.poc.input-json",
+
+    "aws.lambda.function.name" : "serverlessrepo-hello-world-helloworld-7LN9WM3DRP6Y",
+    "aws.lambda.invocation.type" : "async",
+    "aws.lambda.batch.size" : "50",
+
+    "behavior.on.error" : "fail",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+
+    "confluent.topic.bootstrap.servers" : "-.eu-west-1.aws.confluent.cloud:9092",
+    "confluent.topic.security.protocol": "SASL_SSL",
+    "confluent.topic.ssl.endpoint.identification.algorithm": "HTTPS",
+    "confluent.topic.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"\"   password=\"\";",
+    "confluent.topic.sasl.mechanism": "PLAIN",
+
+    "reporter.bootstrap.servers" : "pkc-.-west-1.aws.confluent.cloud:9092",
+    "reporter.admin.security.protocol": "SASL_SSL",
+    "reporter.admin.ssl.endpoint.identification.algorithm": "HTTPS",
+    "reporter.admin.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"\"   password=\"\";",
+    "reporter.admin.sasl.mechanism": "PLAIN",
+    "reporter.producer.security.protocol": "SASL_SSL",
+    "reporter.producer.ssl.endpoint.identification.algorithm": "HTTPS",
+    "reporter.producer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"\"   password=\"\";",
+    "reporter.producer.sasl.mechanism": "PLAIN"
+  }
+}

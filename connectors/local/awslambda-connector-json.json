@@ -1,0 +1,25 @@
+{
+  "name": "LambdaSinkConnectorJson",
+  "config" : {
+    "connector.class" : "io.confluent.connect.aws.lambda.AwsLambdaSinkConnector",
+    "tasks.max" : "1",
+
+    "topics" : "aramex.poc.input-json",
+
+    "aws.lambda.function.name" : "serverlessrepo-hello-world-helloworld-7LN9WM3DRP6Y",
+    "aws.lambda.invocation.type" : "async",
+    "aws.lambda.batch.size" : "50",
+
+    "behavior.on.error" : "fail",
+
+    "confluent.topic.bootstrap.servers" : "kafka1:19092",
+    "confluent.topic.replication.factor" : "1",
+
+    "reporter.bootstrap.servers" : "kafka1:19092",
+    "reporter.result.topic.replication.factor" : "1",
+    "reporter.error.topic.replication.factor" : "1",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter"
+  }
+}

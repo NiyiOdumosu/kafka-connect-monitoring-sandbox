@@ -12,16 +12,19 @@
     <kafka.version>2.6.0</kafka.version>
     <confluent.version>5.5.1</confluent.version>
 
-    <maven.compiler.source>14</maven.compiler.source>
-    <maven.compiler.target>14</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <dependencies>
+    <!-- kafka clients to produce events -->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
     </dependency>
+
+    <!-- kafka streams and schema registry -->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-streams</artifactId>
@@ -37,6 +40,8 @@
       <artifactId>kafka-streams-json-schema-serde</artifactId>
       <version>${confluent.version}</version>
     </dependency>
+
+    <!-- utilities -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
@@ -48,6 +53,7 @@
       <version>1.4.0</version>
     </dependency>
 
+    <!-- testing -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

@@ -1,1 +1,5 @@
-connector/
+connector-plugins/
+*.zip*
+aws/credentials
+env
+topologies/ccloud.properties
