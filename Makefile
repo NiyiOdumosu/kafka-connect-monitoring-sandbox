@@ -61,7 +61,10 @@ ccloud-down:
 	docker-compose -f ccloud.yml down --remove-orphans
 
 ccloud-topology:
-	docker-compose -f ccloud.yml exec topology-builder kafka-topology-builder.sh --brokers ${CCLOUD_BOOTSTRAP_SERVERS} --clientConfig /topologies/ccloud.properties --topology /topologies/ccloud.yml
+	docker-compose -f ccloud.yml exec topology-builder kafka-topology-builder.sh \
+		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
+		--clientConfig /topologies/ccloud.properties \
+		--topology /topologies/ccloud.yml
 
 ccloud-connector-rabbitmq:
 	curl -X POST --data @connectors/ccloud/rabbitmq-connector.json -H "Content-type: application/json" http://localhost:8083/connectors
@@ -86,8 +89,12 @@ ccloud-app-service-account: ccloud-pre
 	ccloud service-account create aramex-poc --description "Confluent PoC for Aramex"
 
 ccloud-app-acl: ccloud-pre
-	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} --operation DESCRIBE --operation CREATE --operation READ --operation WRITE --topic  aramex.poc --prefix
-	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} --operation DESCRIBE --operation READ --consumer-group  aramex-poc --prefix
+	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
+		--operation DESCRIBE --operation CREATE --operation READ --operation WRITE \
+		--topic  aramex.poc --prefix
+	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
+		--operation DESCRIBE --operation READ \
+		--consumer-group  aramex-poc --prefix
 
 ccloud-app-api-key: ccloud-pre
 	ccloud api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_CLUSTER} --description "Confluent PoC for Aramex"
@@ -109,12 +116,12 @@ ccloud-streams:
 	./mvnw exec:java -Dexec.mainClass="poc.adapter.Main" -Dconfig.file=src/main/resources/ccloud.conf
 
 perf-topic: ccloud-pre
-	ccloud kafka topic create perf
+	ccloud kafka topic create perf1
 
 perf-producer:
 	${CONFLUENT_HOME}/bin/kafka-producer-perf-test \
 		--producer-props bootstrap.servers=${CCLOUD_BOOTSTRAP_SERVERS} \
-		--topic perf \
+		--topic perf1 \
 		--num-records 100000 --record-size 1000 --throughput -1 \
 		--print-metrics \
 		--producer.config perf/client.properties
@@ -122,8 +129,8 @@ perf-producer:
 perf-consumer:
 	${CONFLUENT_HOME}/bin/kafka-consumer-perf-test \
 		--bootstrap-server ${CCLOUD_BOOTSTRAP_SERVERS} \
-		--topic perf --group g1 \
-		--messages 10000 --threads 10  \
+		--topic perf1 --group g1 \
+		--messages 100000 --threads 10  \
 		--show-detailed-stats \
 		--consumer.config perf/client.properties
 
@@ -131,7 +138,7 @@ perf-consumer:
 perf-e2e-latency:
 	${CONFLUENT_HOME}/bin/kafka-run-class kafka.tools.EndToEndLatency \
 		${CCLOUD_BOOTSTRAP_SERVERS} \
-		perf \
+		perf1 \
 		1000 \
 		all \
 		100 \
