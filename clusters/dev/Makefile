@@ -1,6 +1,9 @@
 ENVIRONMENT_NAME := jeqo-aramex
 ENVIRONMENT_ID := t37130
 
+environment:
+	ccloud environment create ${ENVIRONMENT_NAME}
+
 get_environment:
 	ccloud environment list -o json | jq -r '.[] | select(.name=="${ENVIRONMENT_NAME}") | .id'
 
