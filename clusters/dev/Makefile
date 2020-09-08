@@ -1,5 +1,4 @@
 ENVIRONMENT_NAME := jeqo-aramex
-ENVIRONMENT_ID := t37130
 
 environment:
 	ccloud environment create ${ENVIRONMENT_NAME}
