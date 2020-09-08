@@ -24,3 +24,10 @@ cluster: use_environment
 
 schema-registry:
 	ccloud schema-registry cluster enable --cloud aws --geo eu
+
+
+aramex-topics:
+	java -jar kafka-topology-builder-jar-with-dependencies.jar \
+		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
+		--clientConfig ./topologies/ccloud.properties \
+		--topology ./topologies/aramex.yml
