@@ -1,4 +1,4 @@
-ENVIRONMENT_NAME := Development
+ENVIRONMENT_NAME := jeqo-aramex
 ENVIRONMENT_ID := t37130
 
 get_environment:
@@ -19,3 +19,6 @@ cluster: use_environment
 		--region ${CLOUD_REGION} \
 		--availability ${CLUSTER_AVAILABILITY} \
 		--type ${CLUSTER_TYPE}
+
+schema-registry:
+	ccloud schema-registry cluster enable --cloud aws --geo eu
