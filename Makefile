@@ -64,7 +64,7 @@ ccloud-topology:
 	docker-compose -f ccloud.yml exec topology-builder kafka-topology-builder.sh \
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig /topologies/ccloud.properties \
-		--topology /topologies/ccloud.yml
+		--topology /topologies/aramex.yml
 
 ccloud-connector-rabbitmq:
 	curl -X POST --data @connectors/ccloud/rabbitmq-connector.json -H "Content-type: application/json" http://localhost:8083/connectors
@@ -122,9 +122,15 @@ perf-producer:
 	${CONFLUENT_HOME}/bin/kafka-producer-perf-test \
 		--producer-props bootstrap.servers=${CCLOUD_BOOTSTRAP_SERVERS} \
 		--topic perf1 \
-		--num-records 100000 --record-size 1000 --throughput -1 \
-		--print-metrics \
+		--num-records 1000000 --record-size 1000 --throughput 500 \
 		--producer.config perf/client.properties
+
+perf-producer-throughput:
+	${CONFLUENT_HOME}/bin/kafka-producer-perf-test \
+		--producer-props bootstrap.servers=${CCLOUD_BOOTSTRAP_SERVERS} \
+		--topic perf1 \
+		--num-records 1000000 --record-size 1000 --throughput -1 \
+		--producer.config perf/throughput.properties
 
 perf-consumer:
 	${CONFLUENT_HOME}/bin/kafka-consumer-perf-test \

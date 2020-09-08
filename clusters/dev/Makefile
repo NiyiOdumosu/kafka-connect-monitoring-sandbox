@@ -31,3 +31,6 @@ aramex-topics:
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig ./topologies/ccloud.properties \
 		--topology ./topologies/aramex.yml
+
+api-key:
+	ccloud api-key create --resource ${CCLOUD_CLUSTER}
