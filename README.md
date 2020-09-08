@@ -5,6 +5,12 @@
 * Transforming XML payload to schema-based formats
 * Kafka to AWS Lambda
 
+## Architecture
+
+![ingestion](./docs/img/kafka-ingestion.png)
+
+![consumers](./docs/img/kafka-consumers.png)
+
 ## How to run
 
 ### Local deployment
