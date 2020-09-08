@@ -1,0 +1,12 @@
+team: "infoaxs"
+projects:
+  - name: "shipment"
+    topics:
+      - name: "tracking-events-v0"
+        config:
+          replication.factor: "3"
+          num.partitions: "6"
+      - name: "tracking-events-v1"
+        config:
+          replication.factor: "3"
+          num.partitions: "6"
