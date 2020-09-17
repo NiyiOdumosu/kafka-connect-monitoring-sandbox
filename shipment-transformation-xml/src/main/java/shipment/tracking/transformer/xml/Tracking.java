@@ -1,10 +1,10 @@
-package aramex.infoaxs.tracking.shipment.transformer.xml;
+package shipment.tracking.transformer.xml;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "HAWBUpdate")
-public class Shipment {
+public class Tracking {
 
   @JacksonXmlProperty(localName = "HAWBID")
   long hawbId;

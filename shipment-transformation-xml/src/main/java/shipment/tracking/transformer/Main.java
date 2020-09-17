@@ -1,4 +1,4 @@
-package aramex.infoaxs.tracking.shipment.transformer;
+package shipment.tracking.transformer;
 
 import static java.util.stream.Collectors.toMap;
 import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
@@ -7,8 +7,10 @@ import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 import com.typesafe.config.ConfigFactory;
 import java.util.Map.Entry;
 import java.util.Properties;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.Consumed;
 
 public class Main {
 
@@ -24,10 +26,10 @@ public class Main {
     // build stream application
     final var builder = new StreamsBuilder();
     // parse incoming xml array into individual elements
-//    final var inputStream =
-//        builder.stream("aramex.poc.input", Consumed.with(Serdes.String(), Serdes.String()))
-//            .mapValues(Transformer::parseXml)
-//            .flatMapValues(v -> v.books);
+    final var inputStream =
+        builder.stream("aramex.poc.input", Consumed.with(Serdes.String(), Serdes.String()))
+            .mapValues(Transformer::parseXml);
+
     // to plain json
 //    inputStream
 //        .map((k, v) -> KeyValue.pair(v.id, Transformer.toJson(v)))
@@ -55,7 +57,7 @@ public class Main {
     // run streams application
 
     final var streamsConfig = new Properties();
-    streamsConfig.put(APPLICATION_ID_CONFIG, "aramex-poc-adapter");
+    streamsConfig.put(APPLICATION_ID_CONFIG, "infoaxs.shipment.tracking-transformer-xml");
     streamsConfig.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     streamsConfig.putAll(clientConfig);
 

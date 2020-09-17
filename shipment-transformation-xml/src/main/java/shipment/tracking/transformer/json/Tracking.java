@@ -1,9 +1,6 @@
-package aramex.infoaxs.tracking.shipment.transformer.json;
+package shipment.tracking.transformer.json;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
-public class Shipment {
+public class Tracking {
 
   long hawbId;
   String hawbNumber;

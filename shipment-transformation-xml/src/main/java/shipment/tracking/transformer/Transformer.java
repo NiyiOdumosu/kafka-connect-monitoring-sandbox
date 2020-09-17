@@ -1,36 +1,28 @@
-package aramex.infoaxs.tracking.shipment.transformer;
+package shipment.tracking.transformer;
 
-import aramex.infoaxs.tracking.shipment.transformer.xml.Shipment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.avro.AvroMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.apache.avro.Schema;
+import shipment.tracking.transformer.xml.Tracking;
 
 public class Transformer {
-  static AvroMapper avroMapper = new AvroMapper();
+
   static XmlMapper xmlMapper = new XmlMapper();
+  static AvroMapper avroMapper = new AvroMapper();
   static ObjectMapper objectMapper = new ObjectMapper();
 
-  static final String bookAvroSchema = "{"
-      + "\"type\": \"record\","
-      + "\"name\": \"book\","
-      + "\"namespace\": \"poc.adapter.avro\","
-      + "\"fields\": ["
-      + "{\"name\": \"id\",\"type\": \"string\"},"
-      + "{\"name\": \"title\",\"type\": \"string\"},"
-      + "{\"name\": \"author\",\"type\": \"string\"},"
-      + "{\"name\": \"genre\",\"type\": \"string\"},"
-      + "{\"name\": \"price\",\"type\": \"double\"},"
-      + "{\"name\": \"publishDate\",\"type\": \"string\"},"
-      + "{\"name\": \"description\",\"type\": \"string\"}"
-      + "]"
-      + "}";
-  static final Schema.Parser parser = new Schema.Parser();
-  static final Schema schema = parser.parse(bookAvroSchema);
-  static final ObjectMapper mapper = new ObjectMapper();
+  static shipment.tracking.transformer.xml.Tracking parseXml(String raw) {
+    try {
+      return xmlMapper.readValue(raw, Tracking.class);
+    } catch (JsonProcessingException e) {
+      //TODO what to do when data is not 'parseable'?
+      e.printStackTrace();
+      return null;
+    }
+  }
 
 //  static GenericRecord toAvro(poc.adapter.xml.Book v) {
 //    final var avroRecord = new GenericData.Record(schema);
@@ -43,16 +35,6 @@ public class Transformer {
 //    avroRecord.put("description", v.description);
 //    return avroRecord;
 //  }
-
-  static Shipment parseXml(String raw) {
-    try {
-      return xmlMapper.readValue(raw, Shipment.class);
-    } catch (JsonProcessingException e) {
-      //TODO what to do when data is not 'parseable'?
-      e.printStackTrace();
-      return null;
-    }
-  }
 
 //  static poc.adapter.json.Book toJson(poc.adapter.xml.Book book) {
 //    final var book1 = new Book();
@@ -77,8 +59,9 @@ public class Transformer {
 
   public static void main(String[] args) {
     try {
-      String xml = Files.readString(Paths.get("./shipment-transformation-xml/src/test/resources/tracking-activity.xml"));
-      Shipment shipment = parseXml(xml);
+      var path = "./shipment-transformation-xml/src/test/resources/tracking-activity.xml";
+      var xml = Files.readString(Paths.get(path));
+      var shipment = parseXml(xml);
       System.out.println(shipment);
     } catch (Exception e) {
       e.printStackTrace();
