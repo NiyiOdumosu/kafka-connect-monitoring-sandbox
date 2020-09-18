@@ -6,6 +6,158 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = "HAWBUpdate")
 public class Tracking {
 
+  public long getHawbId() {
+    return hawbId;
+  }
+
+  public void setHawbId(long hawbId) {
+    this.hawbId = hawbId;
+  }
+
+  public String getHawbNumber() {
+    return hawbNumber;
+  }
+
+  public void setHawbNumber(String hawbNumber) {
+    this.hawbNumber = hawbNumber;
+  }
+
+  public String getHawbOriginEntity() {
+    return hawbOriginEntity;
+  }
+
+  public void setHawbOriginEntity(String hawbOriginEntity) {
+    this.hawbOriginEntity = hawbOriginEntity;
+  }
+
+  public String getForeignHawbNumber() {
+    return foreignHawbNumber;
+  }
+
+  public void setForeignHawbNumber(String foreignHawbNumber) {
+    this.foreignHawbNumber = foreignHawbNumber;
+  }
+
+  public int getPieces() {
+    return pieces;
+  }
+
+  public void setPieces(int pieces) {
+    this.pieces = pieces;
+  }
+
+  public String getUpdateEntity() {
+    return updateEntity;
+  }
+
+  public void setUpdateEntity(String updateEntity) {
+    this.updateEntity = updateEntity;
+  }
+
+  public String getPiNumber() {
+    return piNumber;
+  }
+
+  public void setPiNumber(String piNumber) {
+    this.piNumber = piNumber;
+  }
+
+  public String getProblemCode() {
+    return problemCode;
+  }
+
+  public void setProblemCode(String problemCode) {
+    this.problemCode = problemCode;
+  }
+
+  public String getComment1() {
+    return comment1;
+  }
+
+  public void setComment1(String comment1) {
+    this.comment1 = comment1;
+  }
+
+  public String getComment2() {
+    return comment2;
+  }
+
+  public void setComment2(String comment2) {
+    this.comment2 = comment2;
+  }
+
+  public String getActionDate() {
+    return actionDate;
+  }
+
+  public void setActionDate(String actionDate) {
+    this.actionDate = actionDate;
+  }
+
+  public String getEntryDate() {
+    return entryDate;
+  }
+
+  public void setEntryDate(String entryDate) {
+    this.entryDate = entryDate;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public long getBranchId() {
+    return branchId;
+  }
+
+  public void setBranchId(long branchId) {
+    this.branchId = branchId;
+  }
+
+  public double getGeoLongitude() {
+    return geoLongitude;
+  }
+
+  public void setGeoLongitude(double geoLongitude) {
+    this.geoLongitude = geoLongitude;
+  }
+
+  public double getGeoLatitude() {
+    return geoLatitude;
+  }
+
+  public void setGeoLatitude(double geoLatitude) {
+    this.geoLatitude = geoLatitude;
+  }
+
+  public String getSourceId() {
+    return sourceId;
+  }
+
+  public void setSourceId(String sourceId) {
+    this.sourceId = sourceId;
+  }
+
+  public HawbDetails getHawbDetails() {
+    return hawbDetails;
+  }
+
+  public void setHawbDetails(HawbDetails hawbDetails) {
+    this.hawbDetails = hawbDetails;
+  }
+
+  public MawbDetails getMawbDetails() {
+    return mawbDetails;
+  }
+
+  public void setMawbDetails(MawbDetails mawbDetails) {
+    this.mawbDetails = mawbDetails;
+  }
+
   @JacksonXmlProperty(localName = "HAWBID")
   long hawbId;
   @JacksonXmlProperty(localName = "HAWBNumber")
@@ -39,13 +191,13 @@ public class Tracking {
   @JacksonXmlProperty(localName = "GeoLatitude")
   double geoLatitude;
   @JacksonXmlProperty(localName = "Source")
-  String source;
+  String sourceId;
   @JacksonXmlProperty(localName = "HAWBDetails")
   HawbDetails hawbDetails;
   @JacksonXmlProperty(localName = "MAWBDetails")
   MawbDetails mawbDetails;
 
-  static class HawbDetails {
+  public static class HawbDetails {
 
     @JacksonXmlProperty(localName = "HAWBNumber")
     String hawbNumber;
@@ -252,13 +404,547 @@ public class Tracking {
     long prepaidRangeId;
 
     @JacksonXmlProperty(localName = "HAWBDimensions")
-    String hawbDimensions; //TODO Containing XML as String (!)
+    String hawbDimensionsXmlString;
+
+    HawbDimensions hawbDimensions;
+
+    public void setHawbDimensions(HawbDimensions hawbDimensions) {
+      this.hawbDimensions = hawbDimensions;
+    }
+
+    public HawbDimensions getHawbDimensions() {
+      return hawbDimensions;
+    }
 
     @JacksonXmlProperty(localName = "AdditionalProperties")
     AdditionalProperties additionalProperties;
+
+    public String getHawbNumber() {
+      return hawbNumber;
+    }
+
+    public String getForeignHawbNumber() {
+      return foreignHawbNumber;
+    }
+
+    public String getHawbOriginEntity() {
+      return hawbOriginEntity;
+    }
+
+    public String getHawbDestinationEntity() {
+      return hawbDestinationEntity;
+    }
+
+    public String getProductType() {
+      return productType;
+    }
+
+    public String getServices() {
+      return services;
+    }
+
+    public boolean isSkeleton() {
+      return skeleton;
+    }
+
+    public String getPickupDate() {
+      return pickupDate;
+    }
+
+    public String getReceivedAt() {
+      return receivedAt;
+    }
+
+    public int getPieces() {
+      return pieces;
+    }
+
+    public double getHawbWeight() {
+      return hawbWeight;
+    }
+
+    public String getHawbWeightUnit() {
+      return hawbWeightUnit;
+    }
+
+    public double getChargeableWeight() {
+      return chargeableWeight;
+    }
+
+    public String getPaymentType() {
+      return paymentType;
+    }
+
+    public double getCollectAmount() {
+      return collectAmount;
+    }
+
+    public String getCollectCurrencyCode() {
+      return collectCurrencyCode;
+    }
+
+    public double getCustomsAmount() {
+      return customsAmount;
+    }
+
+    public String getCustomsCurrencyCode() {
+      return customsCurrencyCode;
+    }
+
+    public String getCommodityCountryCode() {
+      return commodityCountryCode;
+    }
+
+    public String getCommodityDescription() {
+      return commodityDescription;
+    }
+
+    public String getBillingAccountNumber() {
+      return billingAccountNumber;
+    }
+
+    public String getShipperNumber() {
+      return shipperNumber;
+    }
+
+    public String getShipperReference() {
+      return shipperReference;
+    }
+
+    public String getShipperName() {
+      return shipperName;
+    }
+
+    public String getSentBy() {
+      return sentBy;
+    }
+
+    public String getShipperAddress() {
+      return shipperAddress;
+    }
+
+    public String getShipperAddress2() {
+      return shipperAddress2;
+    }
+
+    public String getShipperTelephone() {
+      return shipperTelephone;
+    }
+
+    public String getShipperCity() {
+      return shipperCity;
+    }
+
+    public String getShipperStateCode() {
+      return shipperStateCode;
+    }
+
+    public String getShipperZipCode() {
+      return shipperZipCode;
+    }
+
+    public String getShipperCountryCode() {
+      return shipperCountryCode;
+    }
+
+    public long getShipperId() {
+      return shipperId;
+    }
+
+    public long getShipperTeamId() {
+      return shipperTeamId;
+    }
+
+    public String getShipperReference2() {
+      return shipperReference2;
+    }
+
+    public String getShipperFax() {
+      return shipperFax;
+    }
+
+    public String getShipperEmail() {
+      return shipperEmail;
+    }
+
+    public String getShipperMobile() {
+      return shipperMobile;
+    }
+
+    public String getConsigneeNumber() {
+      return consigneeNumber;
+    }
+
+    public String getConsigneeReference() {
+      return consigneeReference;
+    }
+
+    public String getConsigneeName() {
+      return consigneeName;
+    }
+
+    public String getConsigneeAttentionOf() {
+      return consigneeAttentionOf;
+    }
+
+    public String getConsigneeAddress() {
+      return consigneeAddress;
+    }
+
+    public String getConsigneeAddress2() {
+      return consigneeAddress2;
+    }
+
+    public String getConsigneeTelephone() {
+      return consigneeTelephone;
+    }
+
+    public String getConsigneeTelephone2() {
+      return consigneeTelephone2;
+    }
+
+    public String getConsigneeCity() {
+      return consigneeCity;
+    }
+
+    public String getConsigneeStateCode() {
+      return consigneeStateCode;
+    }
+
+    public String getConsigneeZipCode() {
+      return consigneeZipCode;
+    }
+
+    public String getConsigneeCountryCode() {
+      return consigneeCountryCode;
+    }
+
+    public long getConsigneeId() {
+      return consigneeId;
+    }
+
+    public long getConsigneeTeamId() {
+      return consigneeTeamId;
+    }
+
+    public String getConsigneeReference2() {
+      return consigneeReference2;
+    }
+
+    public String getConsigneeFax() {
+      return consigneeFax;
+    }
+
+    public String getConsigneeEmail() {
+      return consigneeEmail;
+    }
+
+    public String getConsigneeMobile() {
+      return consigneeMobile;
+    }
+
+    public String getThirdPartynumber() {
+      return thirdPartynumber;
+    }
+
+    public String getThirdPartyReference() {
+      return thirdPartyReference;
+    }
+
+    public String getThirdPartyName() {
+      return thirdPartyName;
+    }
+
+    public String getThirdPartyContact() {
+      return thirdPartyContact;
+    }
+
+    public String getThirdPartyAddress() {
+      return thirdPartyAddress;
+    }
+
+    public String getThirdPartyAddress2() {
+      return thirdPartyAddress2;
+    }
+
+    public String getThirdPartyTelephone() {
+      return thirdPartyTelephone;
+    }
+
+    public String getThirdPartyCity() {
+      return thirdPartyCity;
+    }
+
+    public String getThirdPartyStateCode() {
+      return thirdPartyStateCode;
+    }
+
+    public String getThirdPartyZipCode() {
+      return thirdPartyZipCode;
+    }
+
+    public String getThirdPartyCountryCode() {
+      return thirdPartyCountryCode;
+    }
+
+    public long getThirdPartyId() {
+      return thirdPartyId;
+    }
+
+    public long getThirdPartyTeamId() {
+      return thirdPartyTeamId;
+    }
+
+    public String getThirdPartyEntity() {
+      return thirdPartyEntity;
+    }
+
+    public String getThirdPartyReference2() {
+      return thirdPartyReference2;
+    }
+
+    public long getSourceId() {
+      return sourceId;
+    }
+
+    public String getHawbRemarks() {
+      return hawbRemarks;
+    }
+
+    public double getCashValue() {
+      return cashValue;
+    }
+
+    public String getCashCurrencyCode() {
+      return cashCurrencyCode;
+    }
+
+    public double getInsuranceValue() {
+      return insuranceValue;
+    }
+
+    public String getInsuranceCurrencyCode() {
+      return insuranceCurrencyCode;
+    }
+
+    public double getCodValue() {
+      return codValue;
+    }
+
+    public String getCodCurrencyCode() {
+      return codCurrencyCode;
+    }
+
+    public String getPaymentOption() {
+      return paymentOption;
+    }
+
+    public String getSrnNumber() {
+      return srnNumber;
+    }
+
+    public String getHawbProductGroup() {
+      return hawbProductGroup;
+    }
+
+    public String getOriginLocationCode() {
+      return originLocationCode;
+    }
+
+    public String getDestinationLocationCode() {
+      return destinationLocationCode;
+    }
+
+    public String getHawbRef1() {
+      return hawbRef1;
+    }
+
+    public String getHawbRef2() {
+      return hawbRef2;
+    }
+
+    public String getHawbRef3() {
+      return hawbRef3;
+    }
+
+    public String getHawbAlertedBy() {
+      return hawbAlertedBy;
+    }
+
+    public String getHawbAlertedDate() {
+      return hawbAlertedDate;
+    }
+
+    public String getDueDate() {
+      return dueDate;
+    }
+
+    public String getCollectionReference() {
+      return collectionReference;
+    }
+
+    public double getCube() {
+      return cube;
+    }
+
+    public String getCubeUnit() {
+      return cubeUnit;
+    }
+
+    public String getAccountingInformation() {
+      return accountingInformation;
+    }
+
+    public long getPrepaidRangeId() {
+      return prepaidRangeId;
+    }
+
+    public String getHawbDimensionsXmlString() {
+      return hawbDimensionsXmlString;
+    }
+
+    public AdditionalProperties getAdditionalProperties() {
+      return additionalProperties;
+    }
   }
 
   static class MawbDetails {
+
+    public String getCarrier() {
+      return carrier;
+    }
+
+    public String getOriginPoint() {
+      return originPoint;
+    }
+
+    public String getMawbNumber() {
+      return mawbNumber;
+    }
+
+    public String getDestinationPort() {
+      return destinationPort;
+    }
+
+    public int getOriginEntity() {
+      return originEntity;
+    }
+
+    public String getDestinationEntity() {
+      return destinationEntity;
+    }
+
+    public String getFlt1Carrier() {
+      return flt1Carrier;
+    }
+
+    public String getFlt1Number() {
+      return flt1Number;
+    }
+
+    public String getFlt1Etd() {
+      return flt1Etd;
+    }
+
+    public String getFlt1Eta() {
+      return flt1Eta;
+    }
+
+    public String getVia1() {
+      return via1;
+    }
+
+    public String getFlt2Carrier() {
+      return flt2Carrier;
+    }
+
+    public String getFlt2Number() {
+      return flt2Number;
+    }
+
+    public String getFlt2Etd() {
+      return flt2Etd;
+    }
+
+    public String getFlt2Eta() {
+      return flt2Eta;
+    }
+
+    public String getVia2() {
+      return via2;
+    }
+
+    public String getFlt3Carrier() {
+      return flt3Carrier;
+    }
+
+    public String getFlt3Number() {
+      return flt3Number;
+    }
+
+    public String getFlt3Etd() {
+      return flt3Etd;
+    }
+
+    public String getFlt3Eta() {
+      return flt3Eta;
+    }
+
+    public String getNetEta() {
+      return netEta;
+    }
+
+    public int getMotherBags() {
+      return motherBags;
+    }
+
+    public int getBabyBags() {
+      return babyBags;
+    }
+
+    public double getMawbWeight() {
+      return mawbWeight;
+    }
+
+    public String getMawbWeighUnit() {
+      return mawbWeighUnit;
+    }
+
+    public String getRemarks() {
+      return remarks;
+    }
+
+    public String getOriginEntityCode() {
+      return originEntityCode;
+    }
+
+    public String getDestinationEntityCode() {
+      return destinationEntityCode;
+    }
+
+    public boolean isMawbRecoveryNotRequired() {
+      return mawbRecoveryNotRequired;
+    }
+
+    public String getMawbContainerNumber() {
+      return mawbContainerNumber;
+    }
+
+    public String getFinalizedDate() {
+      return finalizedDate;
+    }
+
+    public long getContractfltGrpsId() {
+      return contractfltGrpsId;
+    }
+
+    public long getSrrId() {
+      return srrId;
+    }
+
+    public long getMawbId() {
+      return mawbId;
+    }
 
     @JacksonXmlProperty(localName = "Carrier")
     String carrier;
@@ -331,10 +1017,23 @@ public class Tracking {
   }
 
   static class AdditionalProperties {
+    public ShipmentProfile getShipmentProfile() {
+      return shipmentProfile;
+    }
+
     @JacksonXmlProperty(localName = "ShipmentProfile")
     ShipmentProfile shipmentProfile;
 
+
     static class ShipmentProfile {
+      public String getBrandName() {
+        return brandName;
+      }
+
+      public String getBusinessType() {
+        return businessType;
+      }
+
       @JacksonXmlProperty(localName = "BrandName")
       String brandName;
       @JacksonXmlProperty(localName = "BusinessType")
