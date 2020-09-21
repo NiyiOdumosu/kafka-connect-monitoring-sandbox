@@ -29,21 +29,32 @@ public class Transformer {
     }
   }
 
+  static String convertToJson(Tracking shipment) {
+
+    try {
+      //Handle embedded XML
+      String hawbDimensionsXmlString = shipment.getHawbDetails().getHawbDimensionsXmlString();
+
+      HawbDimensions hawbDimensions = xmlMapper.readValue(hawbDimensionsXmlString, HawbDimensions.class);
+      shipment.getHawbDetails().setHawbDimensions(hawbDimensions);
+
+      shipment.tracking.transformer.json.Tracking trackingJsonFormat = TrackingMapper.INSTANCE.trackingXmlToJson(shipment);
+
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(trackingJsonFormat);
+
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   public static void main(String[] args) {
     try {
       var path = "src/test/resources/tracking-activity.xml";
       var xml = Files.readString(Paths.get(path));
       var shipment = parseXml(xml);
 
-      //Handle embedded XML
-      String hawbDimensionsXmlString = shipment.getHawbDetails().getHawbDimensionsXmlString();
-      HawbDimensions hawbDimensions = xmlMapper.readValue(hawbDimensionsXmlString, HawbDimensions.class);
-      shipment.getHawbDetails().setHawbDimensions(hawbDimensions);
-
-      shipment.tracking.transformer.json.Tracking trackingJsonFormat = TrackingMapper.INSTANCE.trackingXmlToJson(shipment);
-
-      String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(trackingJsonFormat);
-
+      String json = convertToJson(shipment);
 
       System.out.println("JSON OUT:" +json);
     } catch (Exception e) {

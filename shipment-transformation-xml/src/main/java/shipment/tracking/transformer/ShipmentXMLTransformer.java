@@ -11,53 +11,34 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Produced;
+import shipment.tracking.transformer.xml.Tracking;
 
 public class ShipmentXMLTransformer {
 
   public static void main(String[] args) {
     // configs
     final var config = ConfigFactory.load();
-    final var bootstrapServers = config.getString("kafka.bootstrap-servers");
+    final var bootstrapServers = config.getString("kafka.bootstrap.servers");
     var clientConfig = config.getConfig("kafka.client").entrySet().stream()
         .collect(toMap(Entry::getKey, entry -> entry.getValue().unwrapped()));
-    var srConfig = config.getConfig("kafka.schema-registry").entrySet().stream()
+    var srConfig = config.getConfig("kafka.schema.registry").entrySet().stream()
         .collect(toMap(Entry::getKey, entry -> entry.getValue().unwrapped().toString()));
 
     // build stream application
     final var builder = new StreamsBuilder();
+
     // parse incoming xml array into individual elements
-    final var inputStream =
-        builder.stream("aramex.poc.input", Consumed.with(Serdes.String(), Serdes.String()))
+    KStream<String, Tracking> xmlStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()))
             .mapValues(Transformer::parseXml);
 
-    // to plain json
-//    inputStream
-//        .map((k, v) -> KeyValue.pair(v.id, Transformer.toJson(v)))
-//        .mapValues(Transformer::toJsonString)
-//        .to("aramex.poc.input-json", Produced.with(Serdes.String(), Serdes.String()));
-
-    // schema registry config
-//    final var schemaRegistryConfig = new HashMap<>(srConfig);
-
-    // to json-schema based output
-//    final var jsonSchemaSerde = new KafkaJsonSchemaSerde<poc.adapter.json.Book>();
-//    jsonSchemaSerde.configure(schemaRegistryConfig, false);
-//
-//    inputStream
-//        .map((k, v) -> KeyValue.pair(v.id, Transformer.toJson(v)))
-//        .to("aramex.poc.input-json-schema", Produced.with(Serdes.String(), jsonSchemaSerde));
-    // to avro-schema based output
-//    final var avroSchemaSerde = new GenericAvroSerde();
-//    avroSchemaSerde.configure(schemaRegistryConfig, false);
-//
-//    inputStream
-//        .map((k, v) -> KeyValue.pair(v.id, Transformer.toAvro(v)))
-//        .to("aramex.poc.input-avro", Produced.with(Serdes.String(), avroSchemaSerde));
+    xmlStream.mapValues(Transformer::convertToJson)
+            .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
 
     // run streams application
 
     final var streamsConfig = new Properties();
-    streamsConfig.put(APPLICATION_ID_CONFIG, "infoaxs.shipment.tracking-transformer-xml");
     streamsConfig.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     streamsConfig.putAll(clientConfig);
 
