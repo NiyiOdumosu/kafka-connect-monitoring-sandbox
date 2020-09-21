@@ -23,7 +23,11 @@ public class Tracking {
   @Getter @Setter Geo geo;
   @Getter @Setter String source;
   @Getter @Setter HawbDetails hawbDetails;
-  Mawb mawb;
+
+  @Getter @Setter Shipper shipper;
+  @Getter @Setter Receiver receiver;
+  @Getter @Setter ThirdParty thirdParty;
+  @Getter @Setter Mawb mawb;
 
   public static class  HawbDetails {
 
@@ -70,48 +74,45 @@ public class Tracking {
     @Getter @Setter long prepaidRangeId;
     @Getter @Setter HawbDimensions hawbDimensions;
     @Getter @Setter AdditionalProperties additionalProperties;
-//    Shipper shipper;
-//    Receiver receiver;
-//    ThirdParty thirdParty;
   }
 
-  static class Mawb {
+  public static class Mawb {
 
-    String carrier;
-    String originPoint;
-    String mawbNumber;
-    String destinationPort;
-    int originEntity;
-    String destinationEntity;
-    String flt1Carrier;
-    String flt1Number;
-    long flt1Etd;
-    long flt1Eta;
-    String via1;
-    String flt2Carrier;
-    String flt2Number;
-    long flt2Etd;
-    long flt2Eta;
-    String via2;
-    String flt3Carrier;
-    String flt3Number;
-    long flt3Etd;
-    long flt3Eta;
-    String via3;
-    long netEta;
-    int motherBags;
-    int babyBags;
-    double mawbWeight;
-    String mawbWeighUnit;
-    String remarks;
-    String originEntityCode;
-    String destinationEntityCode;
-    boolean mawbRecoveryNotRequired;
-    String mawbContainerNumber;
-    long finalizedDate;
-    long contractfltGrpsId;
-    long srrId;
-    long mawbId;
+    @Getter @Setter String carrier;
+    @Getter @Setter String originPoint;
+    @Getter @Setter String mawbNumber;
+    @Getter @Setter String destinationPort;
+    @Getter @Setter int originEntity;
+    @Getter @Setter String destinationEntity;
+    @Getter @Setter String flt1Carrier;
+    @Getter @Setter String flt1Number;
+    @Getter @Setter String flt1Etd;
+    @Getter @Setter String flt1Eta;
+    @Getter @Setter String via1;
+    @Getter @Setter String flt2Carrier;
+    @Getter @Setter String flt2Number;
+    @Getter @Setter String flt2Etd;
+    @Getter @Setter String flt2Eta;
+    @Getter @Setter String via2;
+    @Getter @Setter String flt3Carrier;
+    @Getter @Setter String flt3Number;
+    @Getter @Setter String flt3Etd;
+    @Getter @Setter String flt3Eta;
+    @Getter @Setter String via3;
+    @Getter @Setter String netEta;
+    @Getter @Setter int motherBags;
+    @Getter @Setter int babyBags;
+    @Getter @Setter double mawbWeight;
+    @Getter @Setter String mawbWeighUnit;
+    @Getter @Setter String remarks;
+    @Getter @Setter String originEntityCode;
+    @Getter @Setter String destinationEntityCode;
+    @Getter @Setter boolean mawbRecoveryNotRequired;
+    @Getter @Setter String mawbContainerNumber;
+    @Getter @Setter String finalizedDate;
+    @Getter @Setter long contractfltGrpsId;
+    @Getter @Setter long srrId;
+    @Getter @Setter long mawbId;
   }
 
   public static class Geo {
@@ -140,46 +141,45 @@ public class Tracking {
   }
 
 
-  static class Shipper {
-
-    String hawbOriginEntity;
-    String number;
-    String reference;
-    String reference2;
-    String name;
-    String sentBy;
-    String address;
-    String address2;
-    String telephone;
-    String city;
-    String stateCode;
-    String zipCode;
-    String countryCode;
-    long id;
-    long teamId;
-    String fax;
-    String email;
-    String mobile;
-    String originLocationCode;
+  public static class Shipper {
+    @Getter @Setter String hawbOriginEntity;
+    @Getter @Setter String number;
+    @Getter @Setter String reference;
+    @Getter @Setter String reference2;
+    @Getter @Setter String name;
+    @Getter @Setter String sentBy;
+    @Getter @Setter String address;
+    @Getter @Setter String address2;
+    @Getter @Setter String telephone;
+    @Getter @Setter String city;
+    @Getter @Setter String stateCode;
+    @Getter @Setter String zipCode;
+    @Getter @Setter String countryCode;
+    @Getter @Setter long id;
+    @Getter @Setter long teamId;
+    @Getter @Setter String fax;
+    @Getter @Setter String email;
+    @Getter @Setter String mobile;
+    @Getter @Setter String originLocationCode;
   }
 
-  static class ThirdParty {
+  public static class ThirdParty {
 
-    String number;
-    String reference;
-    String reference2;
-    String name;
-    String contact;
-    String address;
-    String address2;
-    String telephone;
-    String city;
-    String stateCode;
-    String zipCode;
-    String countryCode;
-    long id;
-    long teamId;
-    String entity;
+    @Getter @Setter String number;
+    @Getter @Setter String reference;
+    @Getter @Setter String reference2;
+    @Getter @Setter String name;
+    @Getter @Setter String contact;
+    @Getter @Setter String address;
+    @Getter @Setter String address2;
+    @Getter @Setter String telephone;
+    @Getter @Setter String city;
+    @Getter @Setter String stateCode;
+    @Getter @Setter String zipCode;
+    @Getter @Setter String countryCode;
+    @Getter @Setter long id;
+    @Getter @Setter long teamId;
+    @Getter @Setter String entity;
   }
 
   public static class AdditionalProperties {
@@ -194,27 +194,28 @@ public class Tracking {
   }
 
 
-  static class Receiver {
+  public static class Receiver {
 
-    long id;
-    long teamId;
-    String hawbDestinationEntity;
-    String number;
-    String reference;
-    String reference2;
-    String name;
-    String attentionOf;
-    String address;
-    String address2;
-    String telephone;
-    String telephone2;
-    String city;
-    String zipCode;
-    String countryCode;
-    String fax;
-    String email;
-    String destinationLocationCode;
-    String mobile;
+    @Getter @Setter long id;
+    @Getter @Setter long teamId;
+    @Getter @Setter String hawbDestinationEntity;
+    @Getter @Setter String number;
+    @Getter @Setter String reference;
+    @Getter @Setter String reference2;
+    @Getter @Setter String name;
+    @Getter @Setter String attentionOf;
+    @Getter @Setter String address;
+    @Getter @Setter String address2;
+    @Getter @Setter String telephone;
+    @Getter @Setter String telephone2;
+    @Getter @Setter String city;
+    @Getter @Setter String zipCode;
+    @Getter @Setter String countryCode;
+    @Getter @Setter String stateCode;
+    @Getter @Setter String fax;
+    @Getter @Setter String email;
+    @Getter @Setter String destinationLocationCode;
+    @Getter @Setter String mobile;
   }
 }
 

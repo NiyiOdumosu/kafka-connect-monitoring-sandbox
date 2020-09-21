@@ -12,7 +12,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 
-public class Main {
+public class ShipmentXMLTransformer {
 
   public static void main(String[] args) {
     // configs
