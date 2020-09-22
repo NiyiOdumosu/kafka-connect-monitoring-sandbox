@@ -7,8 +7,7 @@ import org.mapstruct.factory.Mappers;
 import shipment.tracking.transformer.xml.Tracking;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT,
-        uses= {TrackingMapper.HawbDetailsMapper.class, TrackingMapper.ShipperMapper.class,
-                TrackingMapper.ReceiverMapper.class, TrackingMapper.ThirdPartyMapper.class})
+        uses=TrackingMapper.HawbDetailsMapper.class)
 public abstract class TrackingMapper {
 
     public static TrackingMapper INSTANCE = Mappers.getMapper( TrackingMapper.class );
@@ -16,9 +15,6 @@ public abstract class TrackingMapper {
     @Mapping(target = "source", source = "sourceId")
     @Mapping(target = "geo", source = "shipment")
     @Mapping(target = "hawbDetails", source = "hawbDetails")
-    @Mapping(target = "shipper", source = "hawbDetails")
-    @Mapping(target = "receiver", source = "hawbDetails")
-    @Mapping(target = "thirdParty", source = "hawbDetails")
     @Mapping(target = "mawb", source = "mawbDetails")
     public abstract shipment.tracking.transformer.json.Tracking trackingXmlToJson(Tracking shipment);
 
@@ -33,11 +29,15 @@ public abstract class TrackingMapper {
         return geo;
     }
 
-    @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)
+    @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT, uses={TrackingMapper.ShipperMapper.class,
+            TrackingMapper.ReceiverMapper.class, TrackingMapper.ThirdPartyMapper.class})
     interface HawbDetailsMapper {
 
         @Mapping(target = "hawbDimensions.dim", source = "hawbDimensions")
-        shipment.tracking.transformer.json.Tracking.HawbDetails hawbDetailsXmlToJson(Tracking.HawbDetails shipment);
+        @Mapping(target = "shipper", source = "hawbDetails")
+        @Mapping(target = "receiver", source = "hawbDetails")
+        @Mapping(target = "thirdParty", source = "hawbDetails")
+        shipment.tracking.transformer.json.Tracking.HawbDetails hawbDetailsXmlToJson(Tracking.HawbDetails hawbDetails);
     }
 
     @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)

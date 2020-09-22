@@ -24,16 +24,15 @@ public class Tracking {
   @Getter @Setter String source;
   @Getter @Setter HawbDetails hawbDetails;
 
-  @Getter @Setter Shipper shipper;
-  @Getter @Setter Receiver receiver;
-  @Getter @Setter ThirdParty thirdParty;
   @Getter @Setter Mawb mawb;
 
   public static class  HawbDetails {
 
     @Getter @Setter String hawbNumber;
-    @Getter @Setter String foreignHawbNumber;
+    @Getter @Setter String hawbOriginEntity;
     @Getter @Setter String productType;
+    @Getter @Setter String hawbDestinationEntity;
+    @Getter @Setter String foreignHawbNumber;
     @Getter @Setter String services;
     @Getter @Setter boolean skeleton;
     @Getter @Setter String pickupDate;
@@ -72,8 +71,13 @@ public class Tracking {
     @Getter @Setter String cubeUnit;
     @Getter @Setter String accountingInformation;
     @Getter @Setter long prepaidRangeId;
+
     @Getter @Setter HawbDimensions hawbDimensions;
     @Getter @Setter AdditionalProperties additionalProperties;
+
+    @Getter @Setter Shipper shipper;
+    @Getter @Setter Receiver receiver;
+    @Getter @Setter ThirdParty thirdParty;
   }
 
   public static class Mawb {
@@ -98,7 +102,6 @@ public class Tracking {
     @Getter @Setter String flt3Number;
     @Getter @Setter String flt3Etd;
     @Getter @Setter String flt3Eta;
-    @Getter @Setter String via3;
     @Getter @Setter String netEta;
     @Getter @Setter int motherBags;
     @Getter @Setter int babyBags;
@@ -142,7 +145,6 @@ public class Tracking {
 
 
   public static class Shipper {
-    @Getter @Setter String hawbOriginEntity;
     @Getter @Setter String number;
     @Getter @Setter String reference;
     @Getter @Setter String reference2;
@@ -196,12 +198,9 @@ public class Tracking {
 
   public static class Receiver {
 
-    @Getter @Setter long id;
-    @Getter @Setter long teamId;
     @Getter @Setter String hawbDestinationEntity;
     @Getter @Setter String number;
     @Getter @Setter String reference;
-    @Getter @Setter String reference2;
     @Getter @Setter String name;
     @Getter @Setter String attentionOf;
     @Getter @Setter String address;
@@ -209,9 +208,12 @@ public class Tracking {
     @Getter @Setter String telephone;
     @Getter @Setter String telephone2;
     @Getter @Setter String city;
+    @Getter @Setter String stateCode;
     @Getter @Setter String zipCode;
     @Getter @Setter String countryCode;
-    @Getter @Setter String stateCode;
+    @Getter @Setter long id;
+    @Getter @Setter long teamId;
+    @Getter @Setter String reference2;
     @Getter @Setter String fax;
     @Getter @Setter String email;
     @Getter @Setter String destinationLocationCode;
