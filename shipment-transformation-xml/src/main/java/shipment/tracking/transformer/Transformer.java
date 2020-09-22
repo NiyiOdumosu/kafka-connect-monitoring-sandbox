@@ -2,7 +2,6 @@ package shipment.tracking.transformer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.avro.AvroMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.nio.file.Files;

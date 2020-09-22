@@ -23,8 +23,6 @@ public class ShipmentXMLTransformer {
     final var bootstrapServers = config.getString("kafka.bootstrap.servers");
     var clientConfig = config.getConfig("kafka.client").entrySet().stream()
         .collect(toMap(Entry::getKey, entry -> entry.getValue().unwrapped()));
-    var srConfig = config.getConfig("kafka.schema.registry").entrySet().stream()
-        .collect(toMap(Entry::getKey, entry -> entry.getValue().unwrapped().toString()));
 
     // build stream application
     final var builder = new StreamsBuilder();
