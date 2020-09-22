@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toMap;
 import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 
+import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -28,11 +29,7 @@ public class ShipmentXMLTransformer {
     final var builder = new StreamsBuilder();
 
     // parse incoming xml array into individual elements
-    KStream<String, Tracking> xmlStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()))
-            .mapValues(Transformer::parseXml);
-
-    xmlStream.mapValues(Transformer::convertToJson)
-            .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
+    createTopology(config, builder);
 
     // run streams application
 
@@ -45,5 +42,15 @@ public class ShipmentXMLTransformer {
     Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
     streams.start();
+  }
+
+   public static void createTopology(Config config, StreamsBuilder builder) {
+    KStream<String, Tracking> xmlStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()))
+            .mapValues(Transformer::parseXml);
+
+     KStream<String, Tracking> nonEmptyDocuments = xmlStream.filter((k, v) -> v != null && v.getMawbDetails() != null);
+
+     nonEmptyDocuments.mapValues(Transformer::convertToJson)
+            .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
   }
 }

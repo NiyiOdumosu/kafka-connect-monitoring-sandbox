@@ -22,7 +22,7 @@ public class Transformer {
 
   static shipment.tracking.transformer.xml.Tracking parseXml(String raw) {
     try {
-      logger.debug("INPUT: " + raw);
+      logger.debug("XML: " + raw);
 
       return xmlMapper.readValue(raw, Tracking.class);
     } catch (JsonProcessingException e) {
@@ -45,7 +45,9 @@ public class Transformer {
 
       shipment.tracking.transformer.json.Tracking trackingJsonFormat = TrackingMapper.INSTANCE.trackingXmlToJson(shipment);
 
-      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(trackingJsonFormat);
+      logger.debug("JSON: " + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(trackingJsonFormat));
+
+      return objectMapper.writeValueAsString(trackingJsonFormat);
 
     } catch (JsonProcessingException e) {
       logger.warn("Error parsing embedded XML: ", e);
