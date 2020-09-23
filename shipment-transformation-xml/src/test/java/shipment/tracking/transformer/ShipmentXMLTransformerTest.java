@@ -56,14 +56,14 @@ public class ShipmentXMLTransformerTest {
     }
 
     @Test
-    public void when_InvalidXML_Then_PrintExceptionAndProceed() {
+    public void when_InvalidXml_Then_PrintExceptionAndProceed() {
         inputTopic.pipeInput("<TAG>");
 
         assertThat(outputTopic.isEmpty());
     }
 
     @Test
-    public void when_ValidXMLWrongSchema_Then_NoOutput() {
+    public void when_ValidXmlWrongSchema_Then_NoOutput() {
         inputTopic.pipeInput("<TAG></TAG>");
 
         assertThat(outputTopic.isEmpty());
@@ -71,7 +71,7 @@ public class ShipmentXMLTransformerTest {
 
     @SneakyThrows
     @Test
-    public void when_ValidXMLCorrectSchema_Then_JsonOutput() {
+    public void when_ValidXmlCorrectSchema_Then_JsonOutput() {
         var xmlPath = "src/test/resources/tracking-activity.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
@@ -89,7 +89,7 @@ public class ShipmentXMLTransformerTest {
 
     @SneakyThrows
     @Test
-    public void when_ValidXMLAdditionalProps_Then_JsonOutput() {
+    public void when_ValidXmlAdditionalProps_Then_JsonOutput() {
         var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
@@ -102,11 +102,21 @@ public class ShipmentXMLTransformerTest {
 
     @SneakyThrows
     @Test
-    public void when_InvalidXMLEmbedCorrectSchema_Then_NoOutput() {
+    public void when_InvalidXmlEmbedCorrectSchema_Then_NoOutput() {
         var xmlPath = "src/test/resources/tracking-activity-invalid-embed.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
         assertThat(outputTopic.isEmpty());
+    }
+
+    @SneakyThrows
+    @Test
+    public void when_EmbeddedXmlIsEmpty_Then_ProduceJsonWithoutDim() {
+        var xmlPath = "src/test/resources/tracking-activity-no-hawdbimensions.xml";
+        var xml = Files.readString(Paths.get(xmlPath));
+        inputTopic.pipeInput(xml);
+
+        assertThat(!outputTopic.isEmpty());
     }
 }

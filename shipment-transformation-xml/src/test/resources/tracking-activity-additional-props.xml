@@ -72,8 +72,7 @@
                 <ThirdPartyContact></ThirdPartyContact>
                 <ThirdPartyAddress></ThirdPartyAddress>
                 <ThirdPartyAddress2></ThirdPartyAddress2>
-                <ThirdPartyTelephone>
-                    </ThirdPartyTelephone>
+                <ThirdPartyTelephone></ThirdPartyTelephone>
                     <ThirdPartyCity></ThirdPartyCity>
                     <ThirdPartyStateCode></ThirdPartyStateCode>
                     <ThirdPartyZipCode></ThirdPartyZipCode>

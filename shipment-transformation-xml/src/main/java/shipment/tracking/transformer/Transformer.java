@@ -41,8 +41,11 @@ public class Transformer {
       if (shipment != null && shipment.getHawbDetails() != null) {
         String hawbDimensionsXmlString = shipment.getHawbDetails().getHawbDimensionsXmlString();
 
-        HawbDimensions hawbDimensions = xmlMapper.readValue(hawbDimensionsXmlString, HawbDimensions.class);
-        shipment.getHawbDetails().setHawbDimensions(hawbDimensions);
+        if (hawbDimensionsXmlString != "") {
+          logger.debug("Embedded XML string: " + hawbDimensionsXmlString);
+          HawbDimensions hawbDimensions = xmlMapper.readValue(hawbDimensionsXmlString, HawbDimensions.class);
+          shipment.getHawbDetails().setHawbDimensions(hawbDimensions);
+        }
       }
 
       shipment.tracking.transformer.json.Tracking trackingJsonFormat = TrackingMapper.INSTANCE.trackingXmlToJson(shipment);
