@@ -48,7 +48,7 @@ public class ShipmentXMLTransformer {
     KStream<String, Tracking> xmlStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()))
             .mapValues(Transformer::parseXml);
 
-     KStream<String, Tracking> nonEmptyDocuments = xmlStream.filter((k, v) -> v != null && v.getMawbDetails() != null);
+     KStream<String, Tracking> nonEmptyDocuments = xmlStream.filter((k, v) -> v != null);
 
      nonEmptyDocuments.mapValues(Transformer::convertToJson)
             .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));

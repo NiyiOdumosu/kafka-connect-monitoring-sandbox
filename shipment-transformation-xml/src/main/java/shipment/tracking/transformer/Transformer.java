@@ -24,9 +24,11 @@ public class Transformer {
     try {
       logger.debug("XML: " + raw);
 
+      xmlMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
       return xmlMapper.readValue(raw, Tracking.class);
     } catch (JsonProcessingException e) {
-      //TODO what to do when data is not 'parsable'?
+
       logger.warn("Error parsing XML: ", e);
       return null;
     }
@@ -55,6 +57,7 @@ public class Transformer {
     }
   }
 
+  //For local development
   public static void main(String[] args) {
     try {
       var path = "src/test/resources/tracking-activity.xml";

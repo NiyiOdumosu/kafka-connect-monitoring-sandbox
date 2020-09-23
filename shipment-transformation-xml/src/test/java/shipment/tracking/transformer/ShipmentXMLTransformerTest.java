@@ -89,6 +89,19 @@ public class ShipmentXMLTransformerTest {
 
     @SneakyThrows
     @Test
+    public void when_ValidXMLAdditionalProps_Then_JsonOutput() {
+        var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
+        var xml = Files.readString(Paths.get(xmlPath));
+        inputTopic.pipeInput(xml);
+
+        String jsonOut = outputTopic.readValue();
+
+        assertThat(!jsonOut.isEmpty());
+
+    }
+
+    @SneakyThrows
+    @Test
     public void when_InvalidXMLEmbedCorrectSchema_Then_NoOutput() {
         var xmlPath = "src/test/resources/tracking-activity-invalid-embed.xml";
         var xml = Files.readString(Paths.get(xmlPath));
