@@ -1,5 +1,6 @@
 package shipment.tracking.transformer.xml;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Getter;
@@ -258,8 +259,7 @@ public class Tracking {
 
     @Getter @Setter HawbDimensions hawbDimensions;
 
-    @Getter @JacksonXmlProperty(localName = "AdditionalProperties")
-    AdditionalProperties additionalProperties;
+    @Getter @Setter JsonNode additionalProperties;
     
   }
 
@@ -333,21 +333,6 @@ public class Tracking {
     long srrId;
     @Getter @JacksonXmlProperty(localName = "MAWBID")
     long mawbId;
-  }
-
-  public static class AdditionalProperties {
-
-    @Getter @JacksonXmlProperty(localName = "ShipmentProfile")
-    ShipmentProfile shipmentProfile;
-
-
-    public static class ShipmentProfile {
-
-      @Getter @JacksonXmlProperty(localName = "BrandName")
-      String brandName;
-      @Getter @JacksonXmlProperty(localName = "BusinessType")
-      String businessType;
-    }
   }
 }
 

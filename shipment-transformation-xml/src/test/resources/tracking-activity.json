@@ -76,9 +76,9 @@
       }
     },
     "additionalProperties": {
-      "shipmentProfile": {
-        "brandName": "Arab Bank Ltd",
-        "businessType": "B2B"
+      "ShipmentProfile": {
+        "BrandName": "Arab Bank Ltd",
+        "BusinessType": "B2B"
       }
     },
     "shipper": {

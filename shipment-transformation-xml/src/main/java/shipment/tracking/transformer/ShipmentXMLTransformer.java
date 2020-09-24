@@ -45,12 +45,15 @@ public class ShipmentXMLTransformer {
   }
 
    public static void createTopology(Config config, StreamsBuilder builder) {
-    KStream<String, Tracking> xmlStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()))
+       KStream<String, String> inputStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()));
+       KStream<String, Tracking> xmlStructureStream = inputStream
             .mapValues(Transformer::parseXml);
 
-     KStream<String, Tracking> nonEmptyDocuments = xmlStream.filter((k, v) -> v != null);
+     KStream<String, Tracking> nonEmptyDocuments = xmlStructureStream
+             .filter((k, v) -> v != null && v.getHawbNumber() != null);
 
      nonEmptyDocuments.mapValues(Transformer::convertToJson)
-            .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
+             .filter((k, v) -> v != null)
+             .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
   }
 }

@@ -1,17 +1,18 @@
 package shipment.tracking.transformer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shipment.tracking.transformer.xml.HawbDimensions;
 import shipment.tracking.transformer.xml.Tracking;
 import shipment.tracking.transformer.xml2JsonMappers.TrackingMapper;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 public class Transformer {
 
@@ -20,16 +21,44 @@ public class Transformer {
   static XmlMapper xmlMapper = new XmlMapper();
   static ObjectMapper objectMapper = new ObjectMapper();
 
-  static shipment.tracking.transformer.xml.Tracking parseXml(String raw) {
+  static shipment.tracking.transformer.xml.Tracking parseXml(String rawXml) {
     try {
-      logger.debug("XML: " + raw);
+      logger.debug("XML: " + rawXml);
 
       xmlMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-      return xmlMapper.readValue(raw, Tracking.class);
+      Tracking tracking = xmlMapper.readValue(rawXml, Tracking.class);
+
+      JsonNode additionalProperties = extractAdditionalProperties(rawXml);
+
+      Optional.ofNullable(tracking)
+              .map(e -> e.getHawbDetails())
+              .ifPresent(e -> e.setAdditionalProperties(additionalProperties));
+
+      return tracking;
     } catch (JsonProcessingException e) {
 
       logger.warn("Error parsing XML: ", e);
+      return null;
+    }
+  }
+
+  private static JsonNode extractAdditionalProperties(String rawXML) {
+
+    try {
+      JsonNode jsonNode = xmlMapper.readTree(rawXML);
+
+      JsonNode additionalProperties = Optional.ofNullable(jsonNode)
+              .map(e -> e.get("HAWBDetails"))
+              .map(e -> e.get("AdditionalProperties"))
+              .orElse(null);
+
+      logger.debug("Additional properties: " + additionalProperties);
+
+      return additionalProperties;
+    } catch (JsonProcessingException e) {
+
+      logger.warn("Error extracting additional properties from XML: ", e);
       return null;
     }
   }

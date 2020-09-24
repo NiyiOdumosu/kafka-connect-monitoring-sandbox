@@ -1,5 +1,6 @@
 package shipment.tracking.transformer.json;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -73,7 +74,7 @@ public class Tracking {
     @Getter @Setter long prepaidRangeId;
 
     @Getter @Setter HawbDimensions hawbDimensions;
-    @Getter @Setter AdditionalProperties additionalProperties;
+    @Getter @Setter JsonNode additionalProperties;
 
     @Getter @Setter Shipper shipper;
     @Getter @Setter Receiver receiver;
@@ -183,18 +184,6 @@ public class Tracking {
     @Getter @Setter long teamId;
     @Getter @Setter String entity;
   }
-
-  public static class AdditionalProperties {
-
-    @Getter @Setter ShipmentProfile shipmentProfile;
-
-    public static class ShipmentProfile {
-
-      @Getter @Setter String brandName;
-      @Getter @Setter String businessType;
-    }
-  }
-
 
   public static class Receiver {
 

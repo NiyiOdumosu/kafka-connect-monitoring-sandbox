@@ -1,10 +1,9 @@
 package shipment.tracking.transformer;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import junit.framework.TestCase;
 import lombok.SneakyThrows;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
@@ -13,10 +12,10 @@ import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 
 import static org.apache.kafka.common.utils.Utils.*;
-import static org.apache.kafka.common.utils.Utils.mkEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShipmentXMLTransformerTest {
@@ -52,21 +51,21 @@ public class ShipmentXMLTransformerTest {
     public void when_EmptyStringInput_Then_NoOutput() {
         inputTopic.pipeInput("");
 
-        assertThat(outputTopic.isEmpty());
+        assertThat(outputTopic.readValuesToList()).isEmpty();
     }
 
     @Test
     public void when_InvalidXml_Then_PrintExceptionAndProceed() {
         inputTopic.pipeInput("<TAG>");
 
-        assertThat(outputTopic.isEmpty());
+        assertThat(outputTopic.readValuesToList()).isEmpty();
     }
 
     @Test
     public void when_ValidXmlWrongSchema_Then_NoOutput() {
         inputTopic.pipeInput("<TAG></TAG>");
 
-        assertThat(outputTopic.isEmpty());
+        assertThat(outputTopic.readValuesToList()).isEmpty();
     }
 
     @SneakyThrows
@@ -84,7 +83,6 @@ public class ShipmentXMLTransformerTest {
         ObjectMapper mapper = new ObjectMapper();
 
         assertThat(mapper.readTree(jsonOut)).isEqualTo(mapper.readTree(expectedJson));
-
     }
 
     @SneakyThrows
@@ -96,8 +94,28 @@ public class ShipmentXMLTransformerTest {
 
         String jsonOut = outputTopic.readValue();
 
-        assertThat(!jsonOut.isEmpty());
+        assertThat(jsonOut).isNotBlank();
+    }
 
+    @SneakyThrows
+    @Test
+    public void when_ValidXmlAdditionalProps_Then_AdditionalPropertiesAreAccessible() {
+        var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
+        var xml = Files.readString(Paths.get(xmlPath));
+
+        inputTopic.pipeInput(xml);
+
+        List<String> strings = outputTopic.readValuesToList();
+
+        assertThat(strings).hasSize(1);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode actual = mapper.readTree(strings.get(0))
+                .get("hawbDetails")
+                .get("additionalProperties")
+                .get("ShipmentProfile");
+
+        assertThat(actual).isNotNull();
     }
 
     @SneakyThrows
@@ -107,7 +125,7 @@ public class ShipmentXMLTransformerTest {
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
-        assertThat(outputTopic.isEmpty());
+        assertThat(outputTopic.readValuesToList()).isEmpty();
     }
 
     @SneakyThrows
@@ -117,6 +135,6 @@ public class ShipmentXMLTransformerTest {
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
-        assertThat(!outputTopic.isEmpty());
+        assertThat(outputTopic.readValuesToList()).isNotEmpty();
     }
 }
