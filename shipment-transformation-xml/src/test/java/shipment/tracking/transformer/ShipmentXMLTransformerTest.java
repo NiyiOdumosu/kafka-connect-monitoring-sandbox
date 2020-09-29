@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ShipmentXMLTransformerTest {
     private TestInputTopic<String, String> inputTopic;
     private TestOutputTopic<String, String> outputTopic;
+    private TestOutputTopic<String, String> errorsTopic;
     private TopologyTestDriver testDriver;
 
     public static final Properties config = mkProperties(mkMap(
@@ -32,7 +33,8 @@ public class ShipmentXMLTransformerTest {
             mkEntry(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName()),
             mkEntry(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0"), // disable for debugging
             mkEntry("kafka.client.source.topic", "aramex.poc.input"),
-            mkEntry("kafka.client.destination.topic", "aramex.poc.output")) // disable for debugging
+            mkEntry("kafka.client.destination.topic", "aramex.poc.output"), // disable for debugging
+            mkEntry("kafka.client.errors.topic", "aramex.poc.errors")) // disable for debugging
     );
 
     @Before
@@ -45,27 +47,31 @@ public class ShipmentXMLTransformerTest {
 
         inputTopic = testDriver.createInputTopic("aramex.poc.input", Serdes.String().serializer(), Serdes.String().serializer());
         outputTopic = testDriver.createOutputTopic("aramex.poc.output", Serdes.String().deserializer(), Serdes.String().deserializer());
+        errorsTopic = testDriver.createOutputTopic("aramex.poc.errors", Serdes.String().deserializer(), Serdes.String().deserializer());
     }
 
     @Test
-    public void when_EmptyStringInput_Then_NoOutput() {
+    public void when_EmptyStringInput_Then_WriteToErrorsTopic() {
         inputTopic.pipeInput("");
 
         assertThat(outputTopic.readValuesToList()).isEmpty();
+        assertThat(errorsTopic.readValuesToList()).isNotEmpty();
     }
 
     @Test
-    public void when_InvalidXml_Then_PrintExceptionAndProceed() {
+    public void when_InvalidXml_Then_WriteToErrorsTopic() {
         inputTopic.pipeInput("<TAG>");
 
         assertThat(outputTopic.readValuesToList()).isEmpty();
+        assertThat(errorsTopic.readValuesToList()).isNotEmpty();
     }
 
     @Test
-    public void when_ValidXmlWrongSchema_Then_NoOutput() {
+    public void when_ValidXmlWrongSchema_Then_WriteToErrorsTopic() {
         inputTopic.pipeInput("<TAG></TAG>");
 
         assertThat(outputTopic.readValuesToList()).isEmpty();
+        assertThat(errorsTopic.readValuesToList()).isNotEmpty();
     }
 
     @SneakyThrows
@@ -83,6 +89,7 @@ public class ShipmentXMLTransformerTest {
         ObjectMapper mapper = new ObjectMapper();
 
         assertThat(mapper.readTree(jsonOut)).isEqualTo(mapper.readTree(expectedJson));
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
     }
 
     @SneakyThrows
@@ -95,6 +102,7 @@ public class ShipmentXMLTransformerTest {
         String jsonOut = outputTopic.readValue();
 
         assertThat(jsonOut).isNotBlank();
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
     }
 
     @SneakyThrows
@@ -116,16 +124,21 @@ public class ShipmentXMLTransformerTest {
                 .get("ShipmentProfile");
 
         assertThat(actual).isNotNull();
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
     }
 
     @SneakyThrows
     @Test
-    public void when_InvalidXmlEmbedCorrectSchema_Then_NoOutput() {
+    public void when_InvalidXmlEmbedCorrectSchema_Then_WriteToErrorsTopic() {
         var xmlPath = "src/test/resources/tracking-activity-invalid-embed.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
-        assertThat(outputTopic.readValuesToList()).isEmpty();
+        List<String> output = outputTopic.readValuesToList();
+        assertThat(output).isEmpty();
+
+        List<String> errors = errorsTopic.readValuesToList();
+        assertThat(errors).isNotEmpty();
     }
 
     @SneakyThrows
@@ -136,5 +149,6 @@ public class ShipmentXMLTransformerTest {
         inputTopic.pipeInput(xml);
 
         assertThat(outputTopic.readValuesToList()).isNotEmpty();
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
     }
 }

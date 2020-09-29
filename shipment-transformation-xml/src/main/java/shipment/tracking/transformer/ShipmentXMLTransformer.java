@@ -1,20 +1,20 @@
 package shipment.tracking.transformer;
 
-import static java.util.stream.Collectors.toMap;
-import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
-import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
-
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import java.util.Map.Entry;
-import java.util.Properties;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
-import shipment.tracking.transformer.xml.Tracking;
+import shipment.tracking.transformer.xml.TrackingXmlConversionResult;
+
+import java.util.Map.Entry;
+import java.util.Properties;
+
+import static java.util.stream.Collectors.toMap;
+import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 
 public class ShipmentXMLTransformer {
 
@@ -45,15 +45,26 @@ public class ShipmentXMLTransformer {
   }
 
    public static void createTopology(Config config, StreamsBuilder builder) {
-       KStream<String, String> inputStream = builder.stream(config.getString("kafka.client.source.topic"), Consumed.with(Serdes.String(), Serdes.String()));
-       KStream<String, Tracking> xmlStructureStream = inputStream
-            .mapValues(Transformer::parseXml);
+       KStream<String, String> inputStream = builder.stream(config.getString("kafka.client.source.topic"),
+               Consumed.with(Serdes.String(), Serdes.String()));
 
-     KStream<String, Tracking> nonEmptyDocuments = xmlStructureStream
-             .filter((k, v) -> v != null && v.getHawbNumber() != null);
+       KStream<String, TrackingXmlConversionResult>[] branches = inputStream
+               .mapValues(Transformer::parseXml)
+               .branch(
+                       (k, v) -> v.getTracking() != null && v.getTracking().getHawbNumber() != null,
+                       (k, v) -> true
+               );
 
-     nonEmptyDocuments.mapValues(Transformer::convertToJson)
+     KStream<String, TrackingXmlConversionResult> xmlStructureStream = branches[0];
+     KStream<String, TrackingXmlConversionResult> xmlParsingErrorsStream = branches[1];
+
+     xmlParsingErrorsStream.mapValues(v -> TrackingXmlConversionResult.mapToJsonString(v.getErrorInfo()))
+             .to(config.getString("kafka.client.errors.topic"), Produced.with(Serdes.String(),
+                     Serdes.String()));
+
+     xmlStructureStream.mapValues(Transformer::convertToJson)
              .filter((k, v) -> v != null)
-             .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(), Serdes.String()));
+             .to(config.getString("kafka.client.destination.topic"), Produced.with(Serdes.String(),
+                     Serdes.String()));
   }
 }
