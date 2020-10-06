@@ -12,7 +12,7 @@ export TOPOLOGY_DEFINITION_YAML=/tmp/toplogy.yaml
 
 This script also expects to find a [kafka-topology-builder](https://github.com/purbon/kafka-topology-builder) jar named `kafka-topology-builder.jar` in the same directory.
 
-You can download the snapshot build of the kafka-topilogy-builder [here](http://ln.kiril.org/Q2IMJl+) or checkout the repo and build the latest jar using `mvn pacage -DskipTests` command.
+You can download the snapshot build of the kafka-topilogy-builder [here](http://ln.kiril.org/Q2IMJl+) or checkout the repo and build the latest jar using `mvn package -DskipTests` command.
 
 # Running the script
 
