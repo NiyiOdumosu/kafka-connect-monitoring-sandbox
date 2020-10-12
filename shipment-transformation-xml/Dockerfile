@@ -5,7 +5,7 @@ RUN curl https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jv
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM adoptopenjdk/openjdk11:jre-11.0.6_10-alpine
-COPY --from=build /usr/src/app/target/shipment-transformation-xml-1.2-SNAPSHOT.jar /usr/app/shipment-transformation-xml-1.2-SNAPSHOT.jar
+COPY --from=build /usr/src/app/target/shipment-transformation-xml-1.3-SNAPSHOT.jar /usr/app/shipment-transformation-xml-1.3-SNAPSHOT.jar
 COPY --from=build /jolokia-jvm-1.6.2-agent.jar /usr/app/jolokia-jvm-1.6.2-agent.jar
 EXPOSE 7777
-ENTRYPOINT ["java","-Dlog4j.rootLogger.level=INFO -Dlog4j.application.level=DEBUG","-javaagent:/usr/app/jolokia-jvm-1.6.2-agent.jar=port=7777,host=0.0.0.0","-Xms512m","-Xmx1024m","-jar","/usr/app/shipment-transformation-xml-1.2-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Dlog4j.rootLogger.level=INFO -Dlog4j.application.level=DEBUG","-javaagent:/usr/app/jolokia-jvm-1.6.2-agent.jar=port=7777,host=0.0.0.0","-Xms512m","-Xmx1024m","-jar","/usr/app/shipment-transformation-xml-1.3-SNAPSHOT.jar"]
