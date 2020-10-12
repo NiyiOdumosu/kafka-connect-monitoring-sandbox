@@ -94,6 +94,24 @@ public class ShipmentXMLTransformerTest {
 
     @SneakyThrows
     @Test
+    public void when_ValidXmlCorrectSchemaEmptyDimWf_Then_JsonOutput() {
+        var xmlPath = "src/test/resources/tracking-activity-empty-dim-wf.xml";
+        var xml = Files.readString(Paths.get(xmlPath));
+        inputTopic.pipeInput(xml);
+
+        String jsonOut = outputTopic.readValue();
+
+        var jsonPath = "src/test/resources/tracking-activity-empty-dim-wf.json";
+        var expectedJson = Files.readString(Paths.get(jsonPath)).replace("\n", "");
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        assertThat(mapper.readTree(jsonOut)).isEqualTo(mapper.readTree(expectedJson));
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
+    }
+
+    @SneakyThrows
+    @Test
     public void when_ValidXmlAdditionalProps_Then_JsonOutput() {
         var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
         var xml = Files.readString(Paths.get(xmlPath));

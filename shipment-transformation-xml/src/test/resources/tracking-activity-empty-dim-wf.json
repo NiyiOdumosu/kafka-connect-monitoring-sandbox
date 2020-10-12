@@ -1,0 +1,157 @@
+{
+  "hawbId": 379296442,
+  "hawbNumber": "41251292644",
+  "hawbOriginEntity": "TUN",
+  "foreignHawbNumber": "",
+  "pieces": 1,
+  "updateEntity": "687",
+  "piNumber": "SH069",
+  "problemCode": "",
+  "comment1": "Rtn HAWB 42897327690",
+  "comment2": "",
+  "actionDate": "2020-10-07T19:27:56",
+  "entryDate": "2020-10-07T19:32:11",
+  "userId": "MalikI",
+  "branchId": 0,
+  "geo": {
+    "type": "Point",
+    "coordinates": [
+      0.0,
+      0.0
+    ]
+  },
+  "source": "20",
+  "hawbDetails": {
+    "hawbNumber": "41251292644",
+    "hawbOriginEntity": "TUN",
+    "productType": "ONP",
+    "hawbDestinationEntity": "TUN",
+    "foreignHawbNumber": "",
+    "services": "",
+    "skeleton": true,
+    "pickupDate": "2019-07-03T12:23:00",
+    "receivedAt": "DLV ",
+    "pieces": 1,
+    "hawbWeight": 1.54,
+    "chargeableWeight": 75.0,
+    "hawbWeightUnit": "KG",
+    "paymentType": "P",
+    "collectAmount": 0.0,
+    "collectCurrencyCode": "",
+    "customsAmount": 407.1,
+    "customsCurrencyCode": "EUR",
+    "commodityCountryCode": "TN",
+    "commodityDescription": "knsdqooj",
+    "billingAccountNumber": "20016",
+    "sourceId": 2,
+    "hawbRemarks": "",
+    "cashValue": 0.0,
+    "cashCurrencyCode": "",
+    "insuranceValue": 0.0,
+    "insuranceCurrencyCode": "",
+    "codValue": 0.0,
+    "codCurrencyCode": "",
+    "paymentOption": "",
+    "srnNumber": "",
+    "hawbProductGroup": "DOM",
+    "hawbRef1": "",
+    "hawbRef2": "",
+    "hawbRef3": "",
+    "hawbAlertedBy": "testingapi",
+    "hawbAlertedDate": "2016-01-21T14:19:00",
+    "dueDate": "",
+    "collectionReference": "",
+    "cube": 225000.0,
+    "cubeUnit": "CM3",
+    "accountingInformation": "",
+    "prepaidRangeId": 0,
+    "hawbDimensions": {
+      "dim": {
+        "wf": 0,
+        "wu": "CM",
+        "p": [
+          "1"
+        ],
+        "l": [
+          "75"
+        ],
+        "w": [
+          "40"
+        ],
+        "h": [
+          "75"
+        ],
+        "gw": [
+          "1.54"
+        ],
+        "vw": [
+          "75"
+        ],
+        "cw": [
+          "75"
+        ]
+      }
+    },
+    "additionalProperties": null,
+    "shipper": {
+      "number": "20016",
+      "reference": "",
+      "reference2": "",
+      "name": "TCL/BAMBINOU",
+      "sentBy": "TCL/BAMBINOU",
+      "address": "6 AVENUE GUTENBERG",
+      "address2": "",
+      "telephone": "0321548798",
+      "city": "Tunis",
+      "stateCode": "Tunis",
+      "zipCode": "",
+      "countryCode": "TN",
+      "id": 7071,
+      "teamId": 0,
+      "fax": "",
+      "email": "mail@test.fr",
+      "mobile": "0321548798",
+      "originLocationCode": "TUN"
+    },
+    "receiver": {
+      "hawbDestinationEntity": "TUN",
+      "number": "",
+      "reference": "",
+      "name": "BUSINESSAAA",
+      "attentionOf": "BUSINESSAAA M. MIAM AUGUSTO",
+      "address": "6 RUE D''ALGERIE",
+      "address2": "",
+      "telephone": "0321515487",
+      "telephone2": "",
+      "city": "Tunis",
+      "stateCode": "",
+      "zipCode": "",
+      "countryCode": "TN",
+      "id": 0,
+      "teamId": 0,
+      "reference2": "",
+      "fax": "",
+      "email": "aug@barcelona.com",
+      "destinationLocationCode": "TUN",
+      "mobile": "0660515487"
+    },
+    "thirdParty": {
+      "number": "",
+      "reference": "",
+      "reference2": "",
+      "name": "",
+      "contact": "",
+      "address": "",
+      "address2": "",
+      "telephone": "",
+      "city": "",
+      "stateCode": "",
+      "zipCode": "",
+      "countryCode": "",
+      "id": 0,
+      "teamId": 0,
+      "entity": ""
+    }
+  },
+  "mawb": null
+}
