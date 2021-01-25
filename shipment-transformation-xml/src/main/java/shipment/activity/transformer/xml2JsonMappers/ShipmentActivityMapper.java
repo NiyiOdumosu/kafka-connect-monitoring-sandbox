@@ -16,6 +16,7 @@ public abstract class ShipmentActivityMapper {
     @Mapping(target = "geo", source = "shipment")
     @Mapping(target = "shipmentDetails", source = "shipmentDetails")
     @Mapping(target = "mawb", source = "mawbDetails")
+    @Mapping(target = "items", source = "items")
     public abstract ShipmentActivity trackingXmlToJson(shipment.activity.transformer.xml.ShipmentActivity shipment);
 
     ShipmentActivity.Geo shipmentToGeo(shipment.activity.transformer.xml.ShipmentActivity shipment) {

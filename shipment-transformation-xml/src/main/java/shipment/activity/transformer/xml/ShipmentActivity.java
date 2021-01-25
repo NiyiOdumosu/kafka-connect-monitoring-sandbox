@@ -47,6 +47,8 @@ public class ShipmentActivity {
   ShipmentDetails shipmentDetails;
   @Getter @JacksonXmlProperty(localName = "MAWBDetails")
   MawbDetails mawbDetails;
+  @Getter @JacksonXmlProperty(localName = "Items")
+  Item[] items;
 
   public static class ShipmentDetails {
 
@@ -333,6 +335,23 @@ public class ShipmentActivity {
     long srrId;
     @Getter @JacksonXmlProperty(localName = "MAWBID")
     long mawbId;
+
+    @Getter @JacksonXmlProperty(localName = "CloseDate") String closeDate;
+    @Getter @JacksonXmlProperty(localName = "Status") String status;
+    @Getter @JacksonXmlProperty(localName = "OriginBranch") long originBranch;
+    @Getter @JacksonXmlProperty(localName = "DestinationBranch") long destinationBranch;
   }
+
+  public static class Item {
+    @Getter @JacksonXmlProperty(localName = "Id") long id;
+    @Getter @JacksonXmlProperty(localName = "ItemNumber") long itemNumber;
+    @Getter @JacksonXmlProperty(localName = "CommodityNo") long commodityNo;
+    @Getter @JacksonXmlProperty(localName = "Description") String description;
+    @Getter @JacksonXmlProperty(localName = "Pieces") long pieces;
+    @Getter @JacksonXmlProperty(localName = "CustomsValue") double customsValue;
+    @Getter @JacksonXmlProperty(localName = "ChargableWeight") double chargableWeight;
+    @Getter @JacksonXmlProperty(localName = "Packing") String packing;
+  }
+
 }
 

@@ -27,6 +27,19 @@ public class ShipmentActivity {
 
   @Getter @Setter Mawb mawb;
 
+  @Getter @Setter Item[] items;
+
+  public static class Item {
+    @Getter @Setter long id;
+    @Getter @Setter long itemNumber;
+    @Getter @Setter long commodityNo;
+    @Getter @Setter String description;
+    @Getter @Setter long pieces;
+    @Getter @Setter double customsValue;
+    @Getter @Setter double chargableWeight;
+    @Getter @Setter String packing;
+  }
+
   public static class ShipmentDetails {
 
     @Getter @Setter String shipmentNumber;
@@ -117,6 +130,11 @@ public class ShipmentActivity {
     @Getter @Setter long contractfltGrpsId;
     @Getter @Setter long srrId;
     @Getter @Setter long mawbId;
+
+    @Getter @Setter String closeDate;
+    @Getter @Setter String status;
+    @Getter @Setter long originBranch;
+    @Getter @Setter long destinationBranch;
   }
 
   public static class Geo {

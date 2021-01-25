@@ -155,5 +155,21 @@
         <ContractFltGrpsID></ContractFltGrpsID>
         <SRRID>7929</SRRID>
         <MAWBID>15798212</MAWBID>
+        <CloseDate>2021-01-18T06:15:00</CloseDate>
+        <Status>Entry</Status>
+        <OriginBranch>28287</OriginBranch>
+        <DestinationBranch>14193</DestinationBranch>
     </MAWBDetails>
+    <Items>
+        <Item>
+            <Id>106826468</Id>
+            <ItemNumber>3444</ItemNumber>
+            <CommodityNo></CommodityNo>
+            <Description>1</Description>
+            <Pieces>1</Pieces>
+            <CustomsValue>1.0000</CustomsValue>
+            <ChargableWeight></ChargableWeight>
+            <Packing>Boxes</Packing>
+        </Item>
+    </Items>
 </HAWBUpdate>

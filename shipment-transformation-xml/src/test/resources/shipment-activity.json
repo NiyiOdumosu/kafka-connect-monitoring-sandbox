@@ -175,6 +175,22 @@
     "finalizedDate": "2020-08-17T09:22:26",
     "contractfltGrpsId": 0,
     "srrId": 7929,
-    "mawbId": 15798212
-  }
+    "mawbId": 15798212,
+    "closeDate": "2021-01-18T06:15:00",
+    "status": "Entry",
+    "originBranch": 28287,
+    "destinationBranch": 14193
+  },
+  "items": [
+    {
+      "id": 106826468,
+      "itemNumber": 3444,
+      "commodityNo": 0,
+      "description": "1",
+      "pieces": 1,
+      "customsValue": 1.0,
+      "chargableWeight": 0.0,
+      "packing": "Boxes"
+    }
+  ]
 }
