@@ -1,4 +1,4 @@
-package shipment.tracking.transformer;
+package shipment.activity.transformer;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -8,7 +8,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
-import shipment.tracking.transformer.xml.TrackingXmlConversionResult;
+import shipment.activity.transformer.xml.ShipmentActivityXmlConversionResult;
 
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -48,17 +48,17 @@ public class ShipmentXMLTransformer {
        KStream<String, String> inputStream = builder.stream(config.getString("kafka.client.source.topic"),
                Consumed.with(Serdes.String(), Serdes.String()));
 
-       KStream<String, TrackingXmlConversionResult>[] branches = inputStream
+       KStream<String, ShipmentActivityXmlConversionResult>[] branches = inputStream
                .mapValues(Transformer::parseXml)
                .branch(
-                       (k, v) -> v.getTracking() != null && v.getTracking().getHawbNumber() != null,
+                       (k, v) -> v.getShipmentActivity() != null && v.getShipmentActivity().getShipmentNumber() != null,
                        (k, v) -> true
                );
 
-     KStream<String, TrackingXmlConversionResult> xmlStructureStream = branches[0];
-     KStream<String, TrackingXmlConversionResult> xmlParsingErrorsStream = branches[1];
+     KStream<String, ShipmentActivityXmlConversionResult> xmlStructureStream = branches[0];
+     KStream<String, ShipmentActivityXmlConversionResult> xmlParsingErrorsStream = branches[1];
 
-     xmlParsingErrorsStream.mapValues(v -> TrackingXmlConversionResult.mapToJsonString(v.getErrorInfo()))
+     xmlParsingErrorsStream.mapValues(v -> ShipmentActivityXmlConversionResult.mapToJsonString(v.getErrorInfo()))
              .to(config.getString("kafka.client.errors.topic"), Produced.with(Serdes.String(),
                      Serdes.String()));
 

@@ -1,4 +1,4 @@
-package shipment.tracking.transformer.xml;
+package shipment.activity.transformer.xml;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -7,20 +7,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JacksonXmlRootElement(localName = "HAWBUpdate")
-public class Tracking {
+public class ShipmentActivity {
 
   @Getter @JacksonXmlProperty(localName = "HAWBID")
-  long hawbId;
+  long shipmentId;
   @Getter @JacksonXmlProperty(localName = "HAWBNumber")
-  String hawbNumber;
+  String shipmentNumber;
   @Getter @JacksonXmlProperty(localName = "HAWBOriginEntity")
-  String hawbOriginEntity;
+  String shipmentOriginCompany;
   @Getter @JacksonXmlProperty(localName = "ForeignHAWBNumber")
-  String foreignHawbNumber;
+  String foreignShipmentNumber;
   @Getter @JacksonXmlProperty(localName = "Pieces")
   int pieces;
   @Getter @JacksonXmlProperty(localName = "UpdateEntity")
-  String updateEntity;
+  String updateCompany;
   @Getter @JacksonXmlProperty(localName = "PINumber")
   String piNumber;
   @Getter @JacksonXmlProperty(localName = "ProblemCode")
@@ -44,20 +44,20 @@ public class Tracking {
   @Getter @JacksonXmlProperty(localName = "Source")
   String sourceId;
   @Getter @JacksonXmlProperty(localName = "HAWBDetails")
-  HawbDetails hawbDetails;
+  ShipmentDetails shipmentDetails;
   @Getter @JacksonXmlProperty(localName = "MAWBDetails")
   MawbDetails mawbDetails;
 
-  public static class HawbDetails {
+  public static class ShipmentDetails {
 
     @Getter @JacksonXmlProperty(localName = "HAWBNumber")
-    String hawbNumber;
+    String shipmentNumber;
     @Getter @JacksonXmlProperty(localName = "ForeignHAWBNumber")
-    String foreignHawbNumber;
+    String foreignShipmentNumber;
     @Getter @JacksonXmlProperty(localName = "HAWBOriginEntity")
-    String hawbOriginEntity;
+    String shipmentOriginCompany;
     @Getter @JacksonXmlProperty(localName = "HAWBDestinationEntity")
-    String hawbDestinationEntity;
+    String shipmentDestinationCompany;
     @Getter @JacksonXmlProperty(localName = "ProductType")
     String productType;
     @Getter @JacksonXmlProperty(localName = "Services")
@@ -71,9 +71,9 @@ public class Tracking {
     @Getter @JacksonXmlProperty(localName = "Pieces")
     int pieces;
     @Getter @JacksonXmlProperty(localName = "HAWBWeight")
-    double hawbWeight;
+    double shipmentWeight;
     @Getter @JacksonXmlProperty(localName = "HAWBWeightUnit")
-    String hawbWeightUnit;
+    String shipmentWeightUnit;
     @Getter @JacksonXmlProperty(localName = "ChargeableWeight")
     double chargeableWeight;
     @Getter @JacksonXmlProperty(localName = "PaymentType")
@@ -203,7 +203,7 @@ public class Tracking {
     @Getter @JacksonXmlProperty(localName = "SourceID")
     long sourceId;
     @Getter @JacksonXmlProperty(localName = "HAWBRemarks")
-    String hawbRemarks;
+    String shipmentRemarks;
     @Getter @JacksonXmlProperty(localName = "CashValue")
     double cashValue;
     @Getter @JacksonXmlProperty(localName = "CashCurrencyCode")
@@ -221,7 +221,7 @@ public class Tracking {
     @Getter @JacksonXmlProperty(localName = "SRNNumber")
     String srnNumber;
     @Getter @JacksonXmlProperty(localName = "HAWBProductGroup")
-    String hawbProductGroup;
+    String shipmentProductGroup;
 
     //Moved to Shipper in json
     @Getter @JacksonXmlProperty(localName = "OriginLocationCode")
@@ -232,15 +232,15 @@ public class Tracking {
 
 
     @Getter @JacksonXmlProperty(localName = "HAWBRef1")
-    String hawbRef1;
+    String shipmentRef1;
     @Getter @JacksonXmlProperty(localName = "HAWBRef2")
-    String hawbRef2;
+    String shipmentRef2;
     @Getter @JacksonXmlProperty(localName = "HAWBRef3")
-    String hawbRef3;
+    String shipmentRef3;
     @Getter @JacksonXmlProperty(localName = "HAWBAlertedBy")
-    String hawbAlertedBy;
+    String shipmentAlertedBy;
     @Getter @JacksonXmlProperty(localName = "HAWBAlertedDate")
-    String hawbAlertedDate;
+    String shipmentAlertedDate;
     @Getter @JacksonXmlProperty(localName = "DueDate")
     String dueDate;
     @Getter @JacksonXmlProperty(localName = "CollectionReference")
@@ -255,9 +255,9 @@ public class Tracking {
     long prepaidRangeId;
 
     @Getter @JacksonXmlProperty(localName = "HAWBDimensions")
-    String hawbDimensionsXmlString;
+    String shipmentDimensionsXmlString;
 
-    @Getter @Setter HawbDimensions hawbDimensions;
+    @Getter @Setter ShipmentDimensions shipmentDimensions;
 
     @Getter @Setter JsonNode additionalProperties;
     

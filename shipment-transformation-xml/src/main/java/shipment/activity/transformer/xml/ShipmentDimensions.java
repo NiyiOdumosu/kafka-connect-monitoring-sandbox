@@ -1,19 +1,18 @@
-package shipment.tracking.transformer.xml;
+package shipment.activity.transformer.xml;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @JacksonXmlRootElement(localName = "DIM")
-public class HawbDimensions {
+public class ShipmentDimensions {
 
-    @Getter @JacksonXmlProperty(localName = "WF")
-    Integer wf;
+    @JacksonXmlProperty(localName = "WF")
+    String wf;
 
     @JacksonXmlProperty(localName = "WU")
     String wu;
@@ -72,6 +71,11 @@ public class HawbDimensions {
 
     public void setCw(List<String> cwValues) {
         this.cw.addAll(cwValues);
+    }
+
+    //Getters
+    public String getWf() {
+        return wf;
     }
 
     public String getWu() {

@@ -1,17 +1,17 @@
-package shipment.tracking.transformer.json;
+package shipment.activity.transformer.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Tracking {
+public class ShipmentActivity {
 
-  @Getter @Setter long hawbId;
-  @Getter @Setter String hawbNumber;
-  @Getter @Setter String hawbOriginEntity;
-  @Getter @Setter String foreignHawbNumber;
+  @Getter @Setter long shipmentId;
+  @Getter @Setter String shipmentNumber;
+  @Getter @Setter String shipmentOriginCompany;
+  @Getter @Setter String foreignShipmentNumber;
   @Getter @Setter int pieces;
-  @Getter @Setter String updateEntity;
+  @Getter @Setter String updateCompany;
   @Getter @Setter String piNumber;
   @Getter @Setter String problemCode;
   @Getter @Setter String comment1;
@@ -23,25 +23,25 @@ public class Tracking {
 
   @Getter @Setter Geo geo;
   @Getter @Setter String source;
-  @Getter @Setter HawbDetails hawbDetails;
+  @Getter @Setter ShipmentDetails shipmentDetails;
 
   @Getter @Setter Mawb mawb;
 
-  public static class  HawbDetails {
+  public static class ShipmentDetails {
 
-    @Getter @Setter String hawbNumber;
-    @Getter @Setter String hawbOriginEntity;
+    @Getter @Setter String shipmentNumber;
+    @Getter @Setter String shipmentOriginCompany;
     @Getter @Setter String productType;
-    @Getter @Setter String hawbDestinationEntity;
-    @Getter @Setter String foreignHawbNumber;
+    @Getter @Setter String shipmentDestinationCompany;
+    @Getter @Setter String foreignShipmentNumber;
     @Getter @Setter String services;
     @Getter @Setter boolean skeleton;
     @Getter @Setter String pickupDate;
     @Getter @Setter String receivedAt;
     @Getter @Setter int pieces;
-    @Getter @Setter double hawbWeight;
+    @Getter @Setter double shipmentWeight;
     @Getter @Setter double chargeableWeight;
-    @Getter @Setter String hawbWeightUnit;
+    @Getter @Setter String shipmentWeightUnit;
     @Getter @Setter String paymentType;
     @Getter @Setter double collectAmount;
     @Getter @Setter String collectCurrencyCode;
@@ -51,7 +51,7 @@ public class Tracking {
     @Getter @Setter String commodityDescription;
     @Getter @Setter String billingAccountNumber;
     @Getter @Setter long sourceId;
-    @Getter @Setter String hawbRemarks;
+    @Getter @Setter String shipmentRemarks;
     @Getter @Setter double cashValue;
     @Getter @Setter String cashCurrencyCode;
     @Getter @Setter double insuranceValue;
@@ -60,12 +60,12 @@ public class Tracking {
     @Getter @Setter String codCurrencyCode;
     @Getter @Setter String paymentOption;
     @Getter @Setter String srnNumber;
-    @Getter @Setter String hawbProductGroup;
-    @Getter @Setter String hawbRef1;
-    @Getter @Setter String hawbRef2;
-    @Getter @Setter String hawbRef3;
-    @Getter @Setter String hawbAlertedBy;
-    @Getter @Setter String hawbAlertedDate;
+    @Getter @Setter String shipmentProductGroup;
+    @Getter @Setter String shipmentRef1;
+    @Getter @Setter String shipmentRef2;
+    @Getter @Setter String shipmentRef3;
+    @Getter @Setter String shipmentAlertedBy;
+    @Getter @Setter String shipmentAlertedDate;
     @Getter @Setter String dueDate;
     @Getter @Setter String collectionReference;
     @Getter @Setter double cube;
@@ -73,7 +73,7 @@ public class Tracking {
     @Getter @Setter String accountingInformation;
     @Getter @Setter long prepaidRangeId;
 
-    @Getter @Setter HawbDimensions hawbDimensions;
+    @Getter @Setter ShipmentDimensions shipmentDimensions;
     @Getter @Setter JsonNode additionalProperties;
 
     @Getter @Setter Shipper shipper;
@@ -126,7 +126,7 @@ public class Tracking {
 
   }
 
-  public static class HawbDimensions {
+  public static class ShipmentDimensions {
 
     @Getter @Setter Dim dim;
 
@@ -182,12 +182,12 @@ public class Tracking {
     @Getter @Setter String countryCode;
     @Getter @Setter long id;
     @Getter @Setter long teamId;
-    @Getter @Setter String entity;
+    @Getter @Setter String company;
   }
 
   public static class Receiver {
 
-    @Getter @Setter String hawbDestinationEntity;
+    @Getter @Setter String shipmentDestinationCompany;
     @Getter @Setter String number;
     @Getter @Setter String reference;
     @Getter @Setter String name;

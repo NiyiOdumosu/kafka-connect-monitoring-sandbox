@@ -12,10 +12,10 @@
         </encoder>
     </appender>
 
-    <logger name="shipment.tracking.transformer" level="debug" additivity="false">
+    <logger name="shipment.shipmentActivity.transformer" level="debug" additivity="false">
         <appender-ref ref="stdout"/>
     </logger>
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="stdout"/>
     </root>
 </configuration>

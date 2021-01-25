@@ -1,4 +1,4 @@
-package shipment.tracking.transformer;
+package shipment.activity.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,31 +77,13 @@ public class ShipmentXMLTransformerTest {
     @SneakyThrows
     @Test
     public void when_ValidXmlCorrectSchema_Then_JsonOutput() {
-        var xmlPath = "src/test/resources/tracking-activity.xml";
+        var xmlPath = "src/test/resources/shipment-activity.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
         String jsonOut = outputTopic.readValue();
 
-        var jsonPath = "src/test/resources/tracking-activity.json";
-        var expectedJson = Files.readString(Paths.get(jsonPath)).replace("\n", "");
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        assertThat(mapper.readTree(jsonOut)).isEqualTo(mapper.readTree(expectedJson));
-        assertThat(errorsTopic.readValuesToList()).isEmpty();
-    }
-
-    @SneakyThrows
-    @Test
-    public void when_ValidXmlCorrectSchemaEmptyDimWf_Then_JsonOutput() {
-        var xmlPath = "src/test/resources/tracking-activity-empty-dim-wf.xml";
-        var xml = Files.readString(Paths.get(xmlPath));
-        inputTopic.pipeInput(xml);
-
-        String jsonOut = outputTopic.readValue();
-
-        var jsonPath = "src/test/resources/tracking-activity-empty-dim-wf.json";
+        var jsonPath = "src/test/resources/shipment-activity.json";
         var expectedJson = Files.readString(Paths.get(jsonPath)).replace("\n", "");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -113,7 +95,7 @@ public class ShipmentXMLTransformerTest {
     @SneakyThrows
     @Test
     public void when_ValidXmlAdditionalProps_Then_JsonOutput() {
-        var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
+        var xmlPath = "src/test/resources/shipment-activity-additional-props.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
@@ -126,7 +108,7 @@ public class ShipmentXMLTransformerTest {
     @SneakyThrows
     @Test
     public void when_ValidXmlAdditionalProps_Then_AdditionalPropertiesAreAccessible() {
-        var xmlPath = "src/test/resources/tracking-activity-additional-props.xml";
+        var xmlPath = "src/test/resources/shipment-activity-additional-props.xml";
         var xml = Files.readString(Paths.get(xmlPath));
 
         inputTopic.pipeInput(xml);
@@ -137,7 +119,7 @@ public class ShipmentXMLTransformerTest {
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode actual = mapper.readTree(strings.get(0))
-                .get("hawbDetails")
+                .get("shipmentDetails")
                 .get("additionalProperties")
                 .get("ShipmentProfile");
 
@@ -148,7 +130,7 @@ public class ShipmentXMLTransformerTest {
     @SneakyThrows
     @Test
     public void when_InvalidXmlEmbedCorrectSchema_Then_WriteToErrorsTopic() {
-        var xmlPath = "src/test/resources/tracking-activity-invalid-embed.xml";
+        var xmlPath = "src/test/resources/shipment-activity-invalid-embed.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 
@@ -162,7 +144,18 @@ public class ShipmentXMLTransformerTest {
     @SneakyThrows
     @Test
     public void when_EmbeddedXmlIsEmpty_Then_ProduceJsonWithoutDim() {
-        var xmlPath = "src/test/resources/tracking-activity-no-hawdbimensions.xml";
+        var xmlPath = "src/test/resources/shipment-activity-no-shipmentdimensions.xml";
+        var xml = Files.readString(Paths.get(xmlPath));
+        inputTopic.pipeInput(xml);
+
+        assertThat(outputTopic.readValuesToList()).isNotEmpty();
+        assertThat(errorsTopic.readValuesToList()).isEmpty();
+    }
+
+    @SneakyThrows
+    @Test
+    public void when_HawbDimensionsEmbeddedXmlIsEmpty() {
+        var xmlPath = "src/test/resources/shipment-activity-no-hawb-dimensions.xml";
         var xml = Files.readString(Paths.get(xmlPath));
         inputTopic.pipeInput(xml);
 

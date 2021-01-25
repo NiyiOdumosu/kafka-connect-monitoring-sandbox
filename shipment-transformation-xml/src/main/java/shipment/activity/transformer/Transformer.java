@@ -1,4 +1,4 @@
-package shipment.tracking.transformer;
+package shipment.activity.transformer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shipment.tracking.transformer.xml.HawbDimensions;
-import shipment.tracking.transformer.xml.Tracking;
-import shipment.tracking.transformer.xml.TrackingXmlConversionResult;
-import shipment.tracking.transformer.xml2JsonMappers.TrackingMapper;
+import shipment.activity.transformer.json.ShipmentActivity;
+import shipment.activity.transformer.xml.ShipmentDimensions;
+import shipment.activity.transformer.xml.ShipmentActivityXmlConversionResult;
+import shipment.activity.transformer.xml2JsonMappers.ShipmentActivityMapper;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,32 +24,32 @@ public class Transformer {
   static XmlMapper xmlMapper = new XmlMapper();
   static ObjectMapper objectMapper = new ObjectMapper();
 
-  static TrackingXmlConversionResult parseXml(String rawXml) {
+  static ShipmentActivityXmlConversionResult parseXml(String rawXml) {
     try {
       logger.debug("XML: " + rawXml);
 
       xmlMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-      Tracking tracking = xmlMapper.readValue(rawXml, Tracking.class);
+      shipment.activity.transformer.xml.ShipmentActivity shipmentActivity = xmlMapper.readValue(rawXml, shipment.activity.transformer.xml.ShipmentActivity.class);
 
       //Handle embedded XML
-      if (tracking.getHawbDetails() != null) {
-        String hawbDimensionsXmlString = tracking.getHawbDetails().getHawbDimensionsXmlString();
+      if (shipmentActivity.getShipmentDetails() != null) {
+        String shipmentDimensionsXmlString = shipmentActivity.getShipmentDetails().getShipmentDimensionsXmlString();
 
-        if (hawbDimensionsXmlString != "") {
-          logger.debug("Embedded XML string: " + hawbDimensionsXmlString);
-          HawbDimensions hawbDimensions = xmlMapper.readValue(hawbDimensionsXmlString, HawbDimensions.class);
-          tracking.getHawbDetails().setHawbDimensions(hawbDimensions);
+        if (shipmentDimensionsXmlString != null && !shipmentDimensionsXmlString.isBlank()) {
+          logger.debug("Embedded XML string: " + shipmentDimensionsXmlString);
+          ShipmentDimensions shipmentDimensions = xmlMapper.readValue(shipmentDimensionsXmlString, ShipmentDimensions.class);
+          shipmentActivity.getShipmentDetails().setShipmentDimensions(shipmentDimensions);
         }
       }
 
       JsonNode additionalProperties = extractAdditionalProperties(rawXml);
 
-      Optional.ofNullable(tracking)
-              .map(e -> e.getHawbDetails())
+      Optional.ofNullable(shipmentActivity)
+              .map(e -> e.getShipmentDetails())
               .ifPresent(e -> e.setAdditionalProperties(additionalProperties));
 
-      return new TrackingXmlConversionResult(tracking, null);
+      return new ShipmentActivityXmlConversionResult(shipmentActivity, null);
     } catch (JsonProcessingException e) {
 
       logger.warn("Error parsing XML: ", e);
@@ -58,7 +58,7 @@ public class Transformer {
       errorInfo.put("errorMessage", e.getMessage());
       errorInfo.put("rawXml", rawXml);
 
-      return new TrackingXmlConversionResult(null, errorInfo);
+      return new ShipmentActivityXmlConversionResult(null, errorInfo);
     }
   }
 
@@ -82,16 +82,16 @@ public class Transformer {
     }
   }
 
-  static String convertToJson(TrackingXmlConversionResult xmlConversionResult) {
+  static String convertToJson(ShipmentActivityXmlConversionResult xmlConversionResult) {
 
     try {
-      Tracking shipment = xmlConversionResult.getTracking();
+      shipment.activity.transformer.xml.ShipmentActivity shipment = xmlConversionResult.getShipmentActivity();
 
-      shipment.tracking.transformer.json.Tracking trackingJsonFormat = TrackingMapper.INSTANCE.trackingXmlToJson(shipment);
+      ShipmentActivity shipmentActivityJsonFormat = ShipmentActivityMapper.INSTANCE.trackingXmlToJson(shipment);
 
-      logger.debug("JSON: " + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(trackingJsonFormat));
+      logger.debug("JSON: " + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(shipmentActivityJsonFormat));
 
-      return objectMapper.writeValueAsString(trackingJsonFormat);
+      return objectMapper.writeValueAsString(shipmentActivityJsonFormat);
 
     } catch (JsonProcessingException e) { //Shouldn't really happen
       logger.warn("Error converting object to JSON: ", e);

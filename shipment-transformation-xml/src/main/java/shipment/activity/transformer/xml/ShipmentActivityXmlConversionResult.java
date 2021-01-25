@@ -1,4 +1,4 @@
-package shipment.tracking.transformer.xml;
+package shipment.activity.transformer.xml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,15 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class TrackingXmlConversionResult {
+public class ShipmentActivityXmlConversionResult {
 
-    @Getter Tracking tracking;
+    @Getter
+    ShipmentActivity shipmentActivity;
     @Getter Map<String, String> errorInfo;
 
-    static Logger logger = LoggerFactory.getLogger(TrackingXmlConversionResult.class);
+    static Logger logger = LoggerFactory.getLogger(ShipmentActivityXmlConversionResult.class);
 
-    public TrackingXmlConversionResult(Tracking trackingParam, Map<String, String> errorInfoParam) {
-        this.tracking = trackingParam;
+    public ShipmentActivityXmlConversionResult(ShipmentActivity shipmentActivityParam, Map<String, String> errorInfoParam) {
+        this.shipmentActivity = shipmentActivityParam;
         this.errorInfo = errorInfoParam;
     }
 

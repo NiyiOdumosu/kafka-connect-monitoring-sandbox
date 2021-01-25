@@ -1,10 +1,10 @@
 {
-  "hawbId": 394055129,
-  "hawbNumber": "33174887141",
-  "hawbOriginEntity": "AMM",
-  "foreignHawbNumber": "",
+  "shipmentId": 394055129,
+  "shipmentNumber": "33174887141",
+  "shipmentOriginCompany": "AMM",
+  "foreignShipmentNumber": "",
   "pieces": 12,
-  "updateEntity": "687",
+  "updateCompany": "687",
   "piNumber": "SH013",
   "problemCode": "",
   "comment1": "DXB,United Arab Emirates",
@@ -18,20 +18,20 @@
     "coordinates": [ 0.0, 0.0 ]
   },
   "source": "1",
-  "hawbDetails": {
-    "hawbNumber": "33174887141",
-    "hawbOriginEntity": "AMM",
+  "shipmentDetails": {
+    "shipmentNumber": "33174887141",
+    "shipmentOriginCompany": "AMM",
     "productType": "PDX",
-    "hawbDestinationEntity": "DXB",
-    "foreignHawbNumber": "",
+    "shipmentDestinationCompany": "DXB",
+    "foreignShipmentNumber": "",
     "services": "",
     "skeleton": false,
     "pickupDate": "2020-08-17T12:12:00",
     "receivedAt": "SHPR",
     "pieces": 12,
-    "hawbWeight": 5.0,
+    "shipmentWeight": 5.0,
     "chargeableWeight": 5.0,
-    "hawbWeightUnit": "KG",
+    "shipmentWeightUnit": "KG",
     "paymentType": "P",
     "collectAmount": 0.0,
     "collectCurrencyCode": "USD",
@@ -41,7 +41,7 @@
     "commodityDescription": "documents",
     "billingAccountNumber": "10101",
     "sourceId": 1,
-    "hawbRemarks": "",
+    "shipmentRemarks": "",
     "cashValue": 0.0,
     "cashCurrencyCode": "JOD",
     "insuranceValue": 0.0,
@@ -50,19 +50,19 @@
     "codCurrencyCode": "",
     "paymentOption": "",
     "srnNumber": "",
-    "hawbProductGroup": "EXP",
-    "hawbRef1": "",
-    "hawbRef2": "",
-    "hawbRef3": "",
-    "hawbAlertedBy": "IyadT",
-    "hawbAlertedDate": "2020-08-17T09:06:51",
+    "shipmentProductGroup": "EXP",
+    "shipmentRef1": "",
+    "shipmentRef2": "",
+    "shipmentRef3": "",
+    "shipmentAlertedBy": "IyadT",
+    "shipmentAlertedDate": "2020-08-17T09:06:51",
     "dueDate": "",
     "collectionReference": "",
     "cube": 20322.0,
     "cubeUnit": "cm3",
     "accountingInformation": "",
     "prepaidRangeId": 0,
-    "hawbDimensions": {
+    "shipmentDimensions": {
       "dim": {
         "wf": 5000,
         "wu": "cm",
@@ -102,7 +102,7 @@
       "originLocationCode": ""
     },
     "receiver": {
-      "hawbDestinationEntity": "DXB",
+      "shipmentDestinationCompany": "DXB",
       "number": "",
       "reference": "",
       "name": "test name",
@@ -138,7 +138,7 @@
       "countryCode": "",
       "id": 0,
       "teamId": 0,
-      "entity": ""
+      "company": ""
     }
   },
   "mawb": {

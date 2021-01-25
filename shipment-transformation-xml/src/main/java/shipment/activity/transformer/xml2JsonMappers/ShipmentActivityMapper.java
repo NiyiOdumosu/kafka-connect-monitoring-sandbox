@@ -1,25 +1,25 @@
-package shipment.tracking.transformer.xml2JsonMappers;
+package shipment.activity.transformer.xml2JsonMappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
-import shipment.tracking.transformer.xml.Tracking;
+import shipment.activity.transformer.json.ShipmentActivity;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT,
-        uses=TrackingMapper.HawbDetailsMapper.class)
-public abstract class TrackingMapper {
+        uses= ShipmentActivityMapper.ShipmentDetailsMapper.class)
+public abstract class ShipmentActivityMapper {
 
-    public static TrackingMapper INSTANCE = Mappers.getMapper( TrackingMapper.class );
+    public static ShipmentActivityMapper INSTANCE = Mappers.getMapper( ShipmentActivityMapper.class );
 
     @Mapping(target = "source", source = "sourceId")
     @Mapping(target = "geo", source = "shipment")
-    @Mapping(target = "hawbDetails", source = "hawbDetails")
+    @Mapping(target = "shipmentDetails", source = "shipmentDetails")
     @Mapping(target = "mawb", source = "mawbDetails")
-    public abstract shipment.tracking.transformer.json.Tracking trackingXmlToJson(Tracking shipment);
+    public abstract ShipmentActivity trackingXmlToJson(shipment.activity.transformer.xml.ShipmentActivity shipment);
 
-    shipment.tracking.transformer.json.Tracking.Geo shipmentToGeo(Tracking shipment) {
-        shipment.tracking.transformer.json.Tracking.Geo geo = new shipment.tracking.transformer.json.Tracking.Geo();
+    ShipmentActivity.Geo shipmentToGeo(shipment.activity.transformer.xml.ShipmentActivity shipment) {
+        ShipmentActivity.Geo geo = new ShipmentActivity.Geo();
 
         geo.setType("Point");
 
@@ -29,15 +29,15 @@ public abstract class TrackingMapper {
         return geo;
     }
 
-    @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT, uses={TrackingMapper.ShipperMapper.class,
-            TrackingMapper.ReceiverMapper.class, TrackingMapper.ThirdPartyMapper.class})
-    interface HawbDetailsMapper {
+    @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT, uses={ShipperMapper.class,
+            ReceiverMapper.class, ThirdPartyMapper.class})
+    interface ShipmentDetailsMapper {
 
-        @Mapping(target = "hawbDimensions.dim", source = "hawbDimensions")
-        @Mapping(target = "shipper", source = "hawbDetails")
-        @Mapping(target = "receiver", source = "hawbDetails")
-        @Mapping(target = "thirdParty", source = "hawbDetails")
-        shipment.tracking.transformer.json.Tracking.HawbDetails hawbDetailsXmlToJson(Tracking.HawbDetails hawbDetails);
+        @Mapping(target = "shipmentDimensions.dim", source = "shipmentDimensions")
+        @Mapping(target = "shipper", source = "shipmentDetails")
+        @Mapping(target = "receiver", source = "shipmentDetails")
+        @Mapping(target = "thirdParty", source = "shipmentDetails")
+        ShipmentActivity.ShipmentDetails shipmentDetailsXmlToJson(shipment.activity.transformer.xml.ShipmentActivity.ShipmentDetails shipmentDetails);
     }
 
     @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)
@@ -59,7 +59,7 @@ public abstract class TrackingMapper {
         @Mapping(target = "fax", source = "shipperFax")
         @Mapping(target = "email", source = "shipperEmail")
         @Mapping(target = "mobile", source = "shipperMobile")
-        shipment.tracking.transformer.json.Tracking.Shipper hawbDetailsXmlToShipperJson(Tracking.HawbDetails shipment);
+        ShipmentActivity.Shipper shipmentDetailsXmlToShipperJson(shipment.activity.transformer.xml.ShipmentActivity.ShipmentDetails shipment);
     }
 
     @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)
@@ -82,7 +82,7 @@ public abstract class TrackingMapper {
         @Mapping(target = "fax", source = "consigneeFax")
         @Mapping(target = "email", source = "consigneeEmail")
         @Mapping(target = "mobile", source = "consigneeMobile")
-        shipment.tracking.transformer.json.Tracking.Receiver hawbDetailsXmlToReceiverJson(Tracking.HawbDetails shipment);
+        ShipmentActivity.Receiver shipmentDetailsXmlToReceiverJson(shipment.activity.transformer.xml.ShipmentActivity.ShipmentDetails shipment);
     }
 
     @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)
@@ -101,9 +101,9 @@ public abstract class TrackingMapper {
         @Mapping(target = "countryCode", source = "thirdPartyCountryCode")
         @Mapping(target = "id", source = "thirdPartyId")
         @Mapping(target = "teamId", source = "thirdPartyTeamId")
-        @Mapping(target = "entity", source = "thirdPartyEntity")
+        @Mapping(target = "company", source = "thirdPartyEntity")
         @Mapping(target = "reference2", source = "thirdPartyReference2")
-        shipment.tracking.transformer.json.Tracking.ThirdParty hawbDetailsXmlToThirdPartyJson(Tracking.HawbDetails shipment);
+        ShipmentActivity.ThirdParty shipmentDetailsXmlToThirdPartyJson(shipment.activity.transformer.xml.ShipmentActivity.ShipmentDetails shipment);
     }
 
 
