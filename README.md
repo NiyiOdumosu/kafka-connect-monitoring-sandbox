@@ -1,6 +1,6 @@
-# Proof of Concepts - Aramex
+# Kafka Connect Monitoring Sandbox
 
-* Topology Builder to manage Topics and ACLs
+* 
 * Kafka to RabbitMQ
 * Transforming XML payload to schema-based formats
 * Kafka to AWS Lambda
@@ -42,17 +42,6 @@ make local-up
 make local-topology
 ```
 
-3. Create RabbitMQ exchange, queue, and binding:
-
-```shell script
-make rabbitmq
-```
-
-4. Deploy Kafka Connector RabbitMQ Sink:
-
-```shell script
-make connector-rabbitmq
-```
 
 5. Produce some data running a Kafka producer: 
 
@@ -177,7 +166,7 @@ and set values on `env` file.
 
 #### Run Demo
 
-1. Start [Docker Compose](./ccloud.yml)
+1. Start [Docker Compose](docker-compose.yml)
 
 ```shell script
 make ccloud-up

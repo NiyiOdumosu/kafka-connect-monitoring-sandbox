@@ -1,0 +1,20 @@
+ {
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "topics": "geico_users_schema",
+    "delete.enabled": "false",
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "name": "commercials-oracle-sink",
+    "connection.url": "jdbc:oracle:thin:@niyi-db.ce0rkrhaegrs.us-east-1.rds.amazonaws.com/poc",
+    "connection.password": "Flow37#&",
+    "connection.user": "niyi",
+    "db.name": "poc",
+    "ssl.mode": "disabled",
+    "insert.mode": "INSERT",
+    "db.timezone": "UTC",
+    "auto.create": "true",
+    "auto.evolve": "true",
+    "batch.sizes": "100000",
+    "tasks.max": "50"
+}

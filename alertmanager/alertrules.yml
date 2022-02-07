@@ -1,0 +1,136 @@
+groups:
+  - name: confluent
+    rules:
+
+      # Alert for any instance that is unreachable for >2 minutes.
+      - alert: service_down
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
+
+      - alert: high_load
+        expr: node_load1 > 0.5
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "Instance {{ $labels.instance }} under high load"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} is under high load."
+
+      # Warning for Active Controller count != 1
+      - alert: active_controller_count
+        expr: sum(kafka_controller_kafkacontroller_activecontrollercount) != 1
+        labels:
+          severity: warning
+        annotations:
+          summary: "Active Controller count != 1"
+          # description: ""
+
+      # Alarm for Active Controller count != 1 for more than 10 secs
+      - alert: active_controller_count
+        expr: sum(kafka_controller_kafkacontroller_activecontrollercount) != 1
+        for: 10s
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Active Controller count != 1 for more than 10 secs"
+          # description: ""
+
+      # Alarm for Offline Partitions count > 0
+      - alert: offline_partitions_count
+        expr: sum(kafka_controller_kafkacontroller_offlinepartitionscount) > 0
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Offline Partitions count > 0"
+          # description: ""
+
+      # Notify for Under Replicated Partitions count > 0
+      - alert: under_replicated_partitions_count
+        expr: sum(kafka_server_replicamanager_underreplicatedpartitions) > 0
+        labels:
+          severity: notify
+        annotations:
+          summary: "Under Replicated Partitions count > 0"
+          # description: ""
+
+      # Alarm for Under Replicated Partitions count > 0 for more than 1 min
+      - alert: under_replicated_partitions_count
+        expr: sum(kafka_server_replicamanager_underreplicatedpartitions) > 0
+        for: 1m
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Under Replicated Partitions count > 0 for more than 1 min"
+          # description: ""
+
+      # Alarm for Under Min In Sync Replicas count > 0
+      - alert: under_min_in_sync_replicas_count
+        expr: sum(kafka_cluster_partition_underminisr) > 0
+        for: 1m
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Under Min In Sync Replicas count > 0"
+          # description: ""
+
+      # Alarm for Idle Broker IO thread activity below 40%
+      - alert: idle_io_activity_percentage
+        expr: kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total < 0.4
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Idle IO thread activity below 40% on broker: {{ $labels.instance }}"
+          # description: ""
+
+      # Alarm for Idle Broker Network thread activity below 40%
+      - alert: idle_network_activity_percentage
+        expr: kafka_network_socketserver_networkprocessoravgidlepercent < 0.4
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Idle Network thread activity below 40% on broker: {{ $labels.instance }}"
+          # description: ""
+
+      # Notify for Zookeeper average request latency > 10ms
+      - alert: zk_avg_request_latency
+        expr: zookeeper_avgrequestlatency * zookeeper_ticktime > 10
+        labels:
+          severity: notify
+        annotations:
+          summary: "Average request latency > 10ms on zookeeper: {{ $labels.instance }}"
+          # description: ""
+
+      # Alarm for Zookeeper average request latency > 10ms for more than 1 min
+      - alert: zk_avg_request_latency
+        expr: zookeeper_avgrequestlatency * zookeeper_ticktime > 10
+        for: 1m
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Average request latency > 10ms for more than 1 min on zookeeper: {{ $labels.instance }}"
+          # description: ""
+
+      # Alarm for Zookeeper client connections above 70%
+      - alert: zk_client_connection_percentage
+        expr: zookeeper_numaliveconnections / zookeeper_maxclientcnxnsperhost > 0.7
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Client connections above 70% on zookeeper: {{ $labels.instance }}"
+          # description: ""
+
+      # Alarm for Zookeeper disconnects per second > 0 for more than 1 min
+      - alert: zk_disconnects
+        expr: rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec[2m]) > 0
+        for: 1m
+        labels:
+          severity: alarm
+        annotations:
+          summary: "Disconnects per second > 0 for more than 1 min on zookeeper: {{ $labels.instance }}"
+          # description: ""
+

@@ -1,20 +1,40 @@
 ---
 version: '3.4'
 services:
-  # Data Stores
-  ## RabbitMQ
-  rabbitmq1:
-    image: rabbitmq:3-management
-    ports:
-      - 5672:5672
-      - 15672:15672
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:6.2.0
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#
+#  broker:
+#    image: confluentinc/cp-kafka:6.2.0
+#    container_name: broker
+#    ports:
+#      # To learn about configuring Kafka for access across networks see
+#      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+#      - "9092:9092"
+#      - 5083:5083
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+#      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-broker.yml"
+#    volumes:
+#      - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
 
-  # Connectors
   ## Kafka Connect cluster
   connect1:
-    image: confluentinc/cp-kafka-connect:${CP_VERSION}
+    image: confluentinc/cp-kafka-connect:6.2.1
     ports:
-      - 8083:8083
+      - 8084:8084
       - 5083:5083
     environment:
       CONNECT_BOOTSTRAP_SERVERS: $CCLOUD_BOOTSTRAP_SERVERS
@@ -34,11 +54,11 @@ services:
       CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
 
       CONNECT_REST_ADVERTISED_HOST_NAME: localhost
-      CONNECT_REST_PORT: 8083
+      CONNECT_REST_PORT: 8084
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
-      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "true"
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: $CCLOUD_SR_URL
       CONNECT_VALUE_CONVERTER_BASIC_AUTH_CREDENTIALS_SOURCE: USER_INFO
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: "$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET"
@@ -57,23 +77,19 @@ services:
       CONNECT_CONSUMER_SASL_MECHANISM: PLAIN
       CONNECT_CONSUMER_REQUEST_TIMEOUT_MS: "20000"
       CONNECT_CONSUMER_RETRY_BACKOFF_MS: "500"
+      KAFKA_CONNECT_CUB_KAFKA_TIMEOUT: "1"
+      # connect logs
+#      CONNECT_LOG4J_ROOT_LOGLEVEL: DEBUG
+#      CONNECT_LOG4J_TOOLS_ROOT_LOGLEVEL: DEBUG
 
       CONNECT_PLUGIN_PATH: /usr/share/java,/connector-plugins
-      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-connect.yaml"
+      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-connect-v2.yml"
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote.port=5084 -Dcom.sun.management.jmxremote.rmi.port=5084 -Dcom.sun.management.jmxremote.local.only=false"
     volumes:
       - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
       - ./connector-plugins:/connector-plugins
       - ./aws/credentials:/root/.aws/credentials
       - ./aws/config:/root/.aws/config
-
-  # CICD
-  topology-builder:
-    image: purbon/kafka-topology-builder:latest
-    command: /bin/bash
-    stdin_open: true
-    tty: true
-    volumes:
-      - ./topologies:/topologies
 
   # Monitoring
   grafana:
@@ -84,15 +100,36 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/:/etc/grafana/provisioning/
+
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus/config/:/etc/prometheus/
+      - ./prometheus-jmx-exporter:/etc/prometheus
+    depends_on:
+      - ccloud_exporter
+
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+
   ccloud_exporter:
     image: dabz/ccloudexporter
     environment:
       CCLOUD_USER: ${CCLOUD_EXPORTER_API_KEY}
       CCLOUD_PASSWORD: ${CCLOUD_EXPORTER_API_SECRET}
-    command: -cluster ${CCLOUD_CLUSTER}
+    command: -config /conf/config.yml
+    volumes:
+      - ./ccloudexporter/config.yml:/conf/config.yml
