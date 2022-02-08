@@ -1,0 +1,20 @@
+ {
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "topics": "users",
+    "delete.enabled": "false",
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "name": "jdbc-oracle-sink",
+    "connection.url": "jdbc:oracle:thin:localhost:1521/db",
+    "connection.user": "admin",
+    "connection.password": "",
+    "db.name": "db",
+    "ssl.mode": "disabled",
+    "insert.mode": "INSERT",
+    "db.timezone": "UTC",
+    "auto.create": "true",
+    "auto.evolve": "true",
+    "batch.sizes": "100000",
+    "tasks.max": "1"
+}
