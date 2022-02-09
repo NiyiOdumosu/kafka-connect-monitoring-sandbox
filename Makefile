@@ -12,11 +12,20 @@ connector-download:
 
 # These commands get set up your local CP cluster
 
-local-up:
-	docker-compose -f local.yml up -d
+up:
+	CCLOUD_CLUSTER=${CCLOUD_CLUSTER} \
+	CCLOUD_BOOTSTRAP_SERVERS=${CCLOUD_BOOTSTRAP_SERVERS} \
+	CCLOUD_EXPORTER_API_KEY=${CCLOUD_EXPORTER_API_KEY} \
+	CCLOUD_EXPORTER_API_SECRET=${CCLOUD_EXPORTER_API_SECRET} \
+	CCLOUD_API_KEY=${CCLOUD_CONNECT_API_KEY} \
+	CCLOUD_API_SECRET=${CCLOUD_CONNECT_API_SECRET} \
+	CCLOUD_SR_URL=${CCLOUD_SR_URL} \
+	CCLOUD_SR_API_KEY=${CCLOUD_CONNECT_SR_API_KEY} \
+	CCLOUD_SR_API_SECRET=${CCLOUD_CONNECT_SR_API_SECRET} \
+	docker-compose up -d
 
-local-down:
-	docker-compose -f local.yml down --remove-orphans
+down:
+	docker-compose down --remove-orphans
 
 local-topology:
 	docker-compose exec topology-builder kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
@@ -51,32 +60,18 @@ logs-connect:
 	docker logs -f connect1
 
 
+
 # Run these commands to set up your connect cluster and authentication credentials for Confluent Cloud
 include env
 
 ccloud-exporter-api-key: ccloud-pre
 	ccloud api-key create --resource cloud
 
-ccloud-up:
-	CCLOUD_CLUSTER=${CCLOUD_CLUSTER} \
-	CCLOUD_BOOTSTRAP_SERVERS=${CCLOUD_BOOTSTRAP_SERVERS} \
-	CCLOUD_EXPORTER_API_KEY=${CCLOUD_EXPORTER_API_KEY} \
-	CCLOUD_EXPORTER_API_SECRET=${CCLOUD_EXPORTER_API_SECRET} \
-	CCLOUD_API_KEY=${CCLOUD_CONNECT_API_KEY} \
-	CCLOUD_API_SECRET=${CCLOUD_CONNECT_API_SECRET} \
-	CCLOUD_SR_URL=${CCLOUD_SR_URL} \
-	CCLOUD_SR_API_KEY=${CCLOUD_CONNECT_SR_API_KEY} \
-	CCLOUD_SR_API_SECRET=${CCLOUD_CONNECT_SR_API_SECRET} \
-	docker-compose -f ccloud.yml up -d
-
-ccloud-down:
-	docker-compose down --remove-orphans
-
 ccloud-topology:
 	docker-compose exec topology-builder kafka-topology-builder.sh \
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig /topologies/ccloud.properties \
-		--topology /topologies/aramex.yml
+		--topology /topologies/ccloud.yml
 
 ccloud-pre:
 	confluent environment use ${CCLOUD_ENV}
@@ -90,15 +85,15 @@ ccloud-topologybuilder-api-key: ccloud-pre
 	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-service-account: ccloud-pre
-	confluent service-account create aramex-poc --description "Confluent PoC for Aramex"
+	confluent service-account create connect-sandbox --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-acl: ccloud-pre
 	confluent kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
 		--operation DESCRIBE --operation CREATE --operation READ --operation WRITE \
-		--topic  aramex.poc --prefix
+		--topic  demo-test-topic --prefix
 	confluent kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
 		--operation DESCRIBE --operation READ \
-		--consumer-group  aramex-poc --prefix
+		--consumer-group  demo-test-topic --prefix
 
 ccloud-app-api-key: ccloud-pre
 	confluent api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_CLUSTER} --description "Confluent Cloud Connect Monitoring Service Account"
@@ -138,10 +133,10 @@ ccloud-remove-connector:
 	curl -X DELETE http://localhost:8083/connectors/| jq
 
 
-
 ccloud-perf: ccloud-pre
 	confluent kafka topic create demo-test-topic
 
+# Below are perf test commands. If you want to send some data to the CC cluster for monitoring without deploying a connector, use this
 
 perf-producer:
 	kafka-producer-perf-test \
