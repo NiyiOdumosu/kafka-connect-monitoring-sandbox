@@ -1,0 +1,17 @@
+{
+    "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
+    "iterations": "1000",
+    "kafka.topic": "commercials_json",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "max.interval": "1000",
+    "name": "datagen-commercials-json",
+    "schema.keyfield": "brand",
+    "schema.string": "{\"type\":\"record\",\"name\":\"commercialrating\",\"fields\":[{\"name\":\"brand\",\"type\":{\"type\": \"string\",\"arg.properties\":{\"options\":[\"Adidas\",\"Nike\"]}}},{\"name\":\"duration\",\"type\":{\"type\":\"int\",\"arg.properties\":{\"options\": [30, 45, 60]}}},{\"name\":\"rating\",\"type\":{\"type\":\"int\",\"arg.properties\":{\"range\":{\"min\":1,\"max\":5}}}}]}",
+    "tasks.max": "1",
+    "topic.creation.enable": "true",
+    "topic.creation.default.replication.factor": 3,
+    "topic.creation.default.partitions": 3,
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+
+}

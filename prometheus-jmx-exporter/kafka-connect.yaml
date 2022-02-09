@@ -1,8 +1,8 @@
 lowercaseOutputName: true
 rules:
-  #kafka.connect:type=app-info,client-id="{clientid}"
-  #kafka.consumer:type=app-info,client-id="{clientid}"
-  #kafka.producer:type=app-info,client-id="{clientid}"
+#  kafka.connect:type=app-info,client-id="{clientid}"
+#  kafka.consumer:type=app-info,client-id="{clientid}"
+#  kafka.producer:type=app-info,client-id="{clientid}"
   - pattern: 'kafka.(.+)<type=app-info, client-id=(.+)><>start-time-ms'
     name: kafka_$1_start_time_seconds
     labels:
@@ -63,12 +63,21 @@ rules:
 
   #kafka.connect:type=connector-task-metrics,connector="{connector}",task="{task}<> status"
   - pattern: 'kafka.connect<type=connector-task-metrics, connector=(.+), task=(.+)><>status: ([a-z-]+)'
-    name: kafka_connect_connector_status
+    name: kafka_connect_task_status
     value: 1
     labels:
       connector: "$1"
       task: "$2"
       status: "$3"
+    help: "Kafka Connect JMX Task status"
+    type: GAUGE
+# ,connector=(.+)><>status: ([a-z-]+)
+  - pattern: 'kafka.connect:<type=connector-metrics, connector=(.+)><>status: ([a-z-]+)'
+    name: kafka_connect_connector_status
+    value: 1
+    labels:
+      connector: "$1"
+      status: "$2"
     help: "Kafka Connect JMX Connector status"
     type: GAUGE
 

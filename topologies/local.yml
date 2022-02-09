@@ -1,20 +1,20 @@
-team: "aramex"
+team: "demo"
 projects:
-  - name: "poc"
+  - name: "test"
     topics:
-      - name: "input"
+      - name: "topic"
         config:
           replication.factor: "1"
           num.partitions: "1"
-      - name: "input-avro"
+      - name: "topic-avro"
         config:
           replication.factor: "1"
           num.partitions: "1"
-      - name: "input-json"
+      - name: "topic-json"
         config:
           replication.factor: "1"
           num.partitions: "1"
-      - name: "input-json-schema"
+      - name: "topic-json-schema"
         config:
           replication.factor: "1"
           num.partitions: "1"

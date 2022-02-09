@@ -1,0 +1,8 @@
+# CICD
+topology-builder:
+  image: purbon/kafka-topology-builder:latest
+  command: /bin/bash
+  stdin_open: true
+  tty: true
+  volumes:
+    - ./topologies:/topologies

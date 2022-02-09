@@ -1,0 +1,14 @@
+{
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "tasks.max": "1",
+        "connection.url": "jdbc:mysql://localhost:3306/db",
+        "connection.user": "admin",
+        "connection.password": "",
+        "table.whitelist": "table_name",
+        "topic.prefix": "mysql-",
+        "mode": "bulk",
+        "topic.creation.groups": "mysql*",
+        "topic.creation.default.replication.factor": 3,
+        "topic.creation.default.partitions": 3
+}
+
