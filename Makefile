@@ -1,93 +1,18 @@
 all: build
 
-build:
-	./mvnw clean compile
-
+# These commands download connectors
 connector-download:
 	mkdir -p connector-plugins
-	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-aws-lambda/versions/1.0.3/confluentinc-kafka-connect-aws-lambda-1.0.3.zip
-	unzip confluentinc-kafka-connect-aws-lambda-1.0.3.zip -d connector-plugins
-	rm confluentinc-kafka-connect-aws-lambda-1.0.3.zip
-	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-rabbitmq-sink/versions/1.3.0-preview/confluentinc-kafka-connect-rabbitmq-sink-1.3.0-preview.zip
-	unzip confluentinc-kafka-connect-rabbitmq-sink-1.3.0-preview.zip -d connector-plugins
-	rm confluentinc-kafka-connect-rabbitmq-sink-1.3.0-preview.zip
-	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-jdbc/versions/10.2.0/confluentinc-kafka-connect-jdbc-10.2.0.zip
-	unzip confluentinc-kafka-connect-jdbc-10.2.0.zip -d connector-plugins
-	rm confluentinc-kafka-connect-jdbc-10.2.0.zip
+	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-jdbc/versions/10.2.0/confluentinc-kafka-connect-jdbc-10.3.2.zip
+	unzip confluentinc-kafka-connect-jdbc-10.3.2.zip -d connector-plugins
+	rm confluentinc-kafka-connect-jdbc-10.3.2.zip
+	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-datagen/versions/0.5.0/confluentinc-kafka-connect-datagen-0.5.3.zip
+	unzip confluentinc-kafka-connect-datagen-0.5.3.zip -d connector-plugins
+	rm confluentinc-kafka-connect-datagen-0.5.3.zip
 
-datagen-download:
-	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-datagen/versions/0.5.0/confluentinc-kafka-connect-datagen-0.5.0.zip
+# These commands get set up your local CP cluster
 
-rabbitmq:
-	docker exec poc-aramex_rabbitmq1_1 rabbitmqadmin declare exchange name=kafka type=fanout
-	docker exec poc-aramex_rabbitmq1_1 rabbitmqadmin declare queue name=test durable=true
-	docker exec poc-aramex_rabbitmq1_1 rabbitmqadmin declare binding source=kafka destination_type=queue destination=test routing_key=5
-
-local-connector-rabbitmq:
-	curl -X POST --data @connectors/local/rabbitmq-connector.json -H "Content-type: application/json" http://localhost:8083/connectors
-
-local-connector-awslambda:
-	curl -X POST --data @connectors/local/awslambda-connector-avro.json -H "Content-type: application/json" http://localhost:8083/connectors
-	curl -X POST --data @connectors/local/awslambda-connector-json.json -H "Content-type: application/json" http://localhost:8083/connectors
-	curl -X POST --data @connectors/local/awslambda-connector-jsonschema.json -H "Content-type: application/json" http://localhost:8083/connectors
-
-local-connector-jdbc:
-	docker exec poc-aramex_connect1_1 curl -X POST --data @connectors/local/mysql.json -H "Content-type: application/json" http://localhost:8083/connectors | jq
-
-local-connector-datagen-users:
-	curl -X PUT --data @connectors/local/datagen.json -H "Content-type: application/json" http://localhost:8084/connectors/datagen-users/config | jq
-
-local-connector-datagen-inventory:
-	curl -X PUT --data @connectors/local/datagen-inventory.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-inventory/config | jq
-
-local-connector-oracle:
-	curl -X PUT --data @connectors/local/oracle-sink.json -H "Content-type: application/json" http://localhost:8083/connectors/niyi-oracle-sink/config | jq
-
-geico-timestamp-view-source-connector:
-	curl -X PUT --data @connectors/ccloud/geico-timestamp-view-source.json -H "Content-type: application/json" http://localhost:8083/connectors/geico-timestamp-view-source/config | jq
-
-geico-incremental-timestamp-view-source-connector:
-	curl -X PUT --data @connectors/ccloud/geico-incremental-timestamp-source.json -H "Content-type: application/json" http://localhost:8083/connectors/geico-incremental-timestamp-view-source/config | jq
-
-geico-bulk-view-source-connector:
-	curl -X PUT --data @connectors/ccloud/geico-bulk-view-source.json -H "Content-type: application/json" http://localhost:8083/connectors/geico-bulk-view-source/config | jq
-
-oracle-demo-warehouse:
- 	curl -X PUT --data '{"connector.class":"io.confluent.connect.oracle.cdc.OracleCdcSourceConnector","oracle.password":"dwm_admin123","oracle.sid":"ORCL","topic.creation.default.partitions":"1","table.topic.name.template":"${databaseName}.${schemaName}.${tableName}","tasks.max":"1","topic.creation.redo.partitions":"1","topic.creation.redo.include":"oracle-redo-log-topic","topic.creation.default.replication.factor":"3","lob.topic.name.template":"${databaseName}.${schemaName}.${tableName}.${columnName}","topic.creation.redo.retention.ms":"1209600000","value.converter":"org.apache.kafka.connect.json.JsonConverter","key.converter":"org.apache.kafka.connect.storage.StringConverter","redo.log.row.fetch.size":"1","oracle.server":"dwm-demo.cjg294eidfaj.us-west-2.rds.amazonaws.com","topic.creation.redo.replication.factor":"3","topic.creation.default.cleanup.policy":"compact","oracle.port":"1521","topic.creation.redo.cleanup.policy":"delete","topic.creation.groups":"redo","oracle.username":"admin","value.converter.schema.registry.url":"http://schemaregistry.confluent.svc.cluster.local:8081","start.from":"SNAPSHOT","table.inclusion.regex":"ORCL.ADMIN.*","name":"OracleCdcSourceConnectorConnector_2","numeric.mapping":"best_fit","max.batch.size":"100", "confluent.topic.bootstrap.servers": "kafka:9071", "redo.log.consumer.bootstrap.servers": "kafka:9071" }' -H "Content-type: application/json" localhost:8083/connectors/OracleCdcSourceConnectorConnector_2/config
-
-local-custom-query:
-	curl -X POST --data @connectors/local/mysql-custom-query.json -H "Content-type: application/json" http://localhost:8083/connectors | jq
-
-local-remove-connector:
-	curl -X DELETE http://localhost:8083/connectors/| jq
-
-get-connectors:
-	curl http://localhost:8083/connectors/ | jq
-
-logs-connect:
-	docker-compose logs -f connect1
-
-local-up:
-	docker-compose -f local.yml up -d
-
-local-down:
-	docker-compose -f local.yml down --remove-orphans
-
-local-topology:
-	docker-compose exec topology-builder kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
-
-local-producer: build
-	./mvnw exec:java -Dexec.mainClass="poc.producer.Main"
-
-local-streams: build
-	./mvnw exec:java -Dexec.mainClass="poc.adapter.Main"
-
-include env
-
-ccloud-exporter-api-key: ccloud-pre
-	ccloud api-key create --resource cloud
-
-ccloud-up:
+up:
 	CCLOUD_CLUSTER=${CCLOUD_CLUSTER} \
 	CCLOUD_BOOTSTRAP_SERVERS=${CCLOUD_BOOTSTRAP_SERVERS} \
 	CCLOUD_EXPORTER_API_KEY=${CCLOUD_EXPORTER_API_KEY} \
@@ -99,81 +24,126 @@ ccloud-up:
 	CCLOUD_SR_API_SECRET=${CCLOUD_CONNECT_SR_API_SECRET} \
 	docker-compose up -d
 
-ccloud-down:
+down:
 	docker-compose down --remove-orphans
+
+local-topology:
+	docker-compose exec topology-builder kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
+
+make local-topic:
+	kafka-topics --create --topic test1 --bootstrap-server kafka1:19092
+
+# The following commands are for connectors that are RW to the local CP cluster
+
+local-datagen-commercials:
+	curl -X PUT --data @connectors/local/datagen-commercials.json -H "Content-type: application/json" http://localhost:8084/connectors/datagen-commercials/config | jq
+
+local-datagen-inventory:
+	curl -X PUT --data @connectors/local/datagen.json -H "Content-type: application/json" http://localhost:8084/connectors/datagen-inventory/config | jq
+
+local-jdbc-mysql:
+	curl -X PUT --data @connectors/local/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql/config | jq
+
+local-jdbc-mysql-custom-query:
+	curl -X PUT --data @connectors/local/oracle-sink.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql-custom-query/config | jq
+
+local-jdbc-sink:
+	curl -X PUT --data @connectors/ccloud/jdbc-sink-schema.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-sink-schema/config | jq
+
+local-get-connectors:
+	curl http://localhost:8084/connectors/ | jq
+
+local-remove-connector:
+	curl -X DELETE http://localhost:8084/connectors/| jq
+
+logs-connect:
+	docker logs -f connect1
+
+
+
+# Run these commands to set up your connect cluster and authentication credentials for Confluent Cloud
+include env
+
+ccloud-exporter-api-key: ccloud-pre
+	ccloud api-key create --resource cloud
 
 ccloud-topology:
 	docker-compose exec topology-builder kafka-topology-builder.sh \
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig /topologies/ccloud.properties \
-		--topology /topologies/aramex.yml
-
-ccloud-connector-rabbitmq:
-	curl -X POST --data @connectors/ccloud/rabbitmq-connector.json -H "Content-type: application/json" http://localhost:8083/connectors
-
-ccloud-connector-awslambda:
-	curl -X POST --data @connectors/ccloud/awslambda-connector-avro.json -H "Content-type: application/json" http://localhost:8083/connectors
-	curl -X POST --data @connectors/ccloud/awslambda-connector-json.json -H "Content-type: application/json" http://localhost:8083/connectors
-	curl -X POST --data @connectors/ccloud/awslambda-connector-jsonschema.json -H "Content-type: application/json" http://localhost:8083/connectors
+		--topology /topologies/ccloud.yml
 
 ccloud-pre:
-	ccloud environment use ${CCLOUD_ENV}
-	ccloud kafka cluster use ${CCLOUD_CLUSTER}
+	confluent environment use ${CCLOUD_ENV}
+	confluent kafka cluster use ${CCLOUD_CLUSTER}
 
 ccloud-connect-api-key: ccloud-pre
-	ccloud api-key create --resource ${CCLOUD_CLUSTER} --description "Aramex PoC Kafka Connect"
-	ccloud api-key create --resource ${CCLOUD_SR} --description "Aramex PoC Kafka Connect - SR"
+	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Cloud API-Key for Connect Monitoring Demo"
+	confluent api-key create --resource ${CCLOUD_SR} --description "Cloud API-Key for Connect Monitoring Demo"
 
 ccloud-topologybuilder-api-key: ccloud-pre
-	ccloud api-key create --resource ${CCLOUD_CLUSTER} --description "Aramex PoC Topology Builder"
+	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-service-account: ccloud-pre
-	ccloud service-account create aramex-poc --description "Confluent PoC for Aramex"
+	confluent service-account create connect-sandbox --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-acl: ccloud-pre
-	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
+	confluent kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
 		--operation DESCRIBE --operation CREATE --operation READ --operation WRITE \
-		--topic  aramex.poc --prefix
-	ccloud kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
+		--topic  demo-test-topic --prefix
+	confluent kafka acl create --allow --service-account ${CCLOUD_SERVICE_ACCOUNT} \
 		--operation DESCRIBE --operation READ \
-		--consumer-group  aramex-poc --prefix
+		--consumer-group  demo-test-topic --prefix
 
 ccloud-app-api-key: ccloud-pre
-	ccloud api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_CLUSTER} --description "Confluent PoC for Aramex"
-	ccloud api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_SR} --description "Confluent PoC for Aramex - SR"
+	confluent api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_CLUSTER} --description "Confluent Cloud Connect Monitoring Service Account"
+	confluent api-key create --service-account ${CCLOUD_SERVICE_ACCOUNT} --resource ${CCLOUD_SR} --description "Confluent Cloud Connect Monitoring Service Accoun - SR"
 
-ccloud-producer:
-	CCLOUD_BOOTSTRAP_SERVERS=${CCLOUD_BOOTSTRAP_SERVERS} \
-	CCLOUD_API_KEY=${CCLOUD_API_KEY} \
-	CCLOUD_API_SECRET=${CCLOUD_API_SECRET} \
-	./mvnw exec:java -Dexec.mainClass="poc.producer.Main" -Dconfig.file=src/main/resources/ccloud.conf
 
-ccloud-streams:
-	CCLOUD_BOOTSTRAP_SERVERS=${CCLOUD_BOOTSTRAP_SERVERS} \
-	CCLOUD_API_KEY=${CCLOUD_API_KEY} \
-	CCLOUD_API_SECRET=${CCLOUD_API_SECRET} \
-	CCLOUD_SR_URL=${CCLOUD_SR_URL} \
-	CCLOUD_SR_API_KEY=${CCLOUD_SR_API_KEY} \
-	CCLOUD_SR_API_SECRET=${CCLOUD_SR_API_SECRET} \
-	./mvnw exec:java -Dexec.mainClass="poc.adapter.Main" -Dconfig.file=src/main/resources/ccloud.conf
+# These commands deploy connectors that RW to your Confluent Cloud cluster
 
-perf-topic: ccloud-pre
-	ccloud kafka topic create perf1
+ccloud-topic: ccloud-pre
+	confluent kafka topic create test-topic
 
-producer:
-	kafka-producer-perf-test \
-    		--producer-props bootstrap.servers=localhost:9092 \
-    		--topic demo-test-topic \
-    		--num-records 10000000 --record-size 1000 --throughput 500
-#    		--producer.config perf/throughput.properties
+ccloud-datagen-users:
+	curl -X PUT --data @connectors/ccloud/datagen-users.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users/config | jq
 
+ccloud-datagen-users-schema:
+	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users-schema/config | jq
+
+ccloud-jdbc-bulk-mode-source:
+	curl -X PUT --data @connectors/ccloud/jdbc-bulk-mode-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-bulk-mode-source/config | jq
+
+ccloud-jdbc-incremental-mode-source:
+	curl -X PUT --data @connectors/ccloud/jdbc-incremental-mode-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-incremental-mode-source/config | jq
+
+ccloud-jdbc-timestamp-mode-source:
+	curl -X PUT --data @connectors/ccloud/jdbc-timestamp-mode-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-timestamp-mode-source/config | jq
+
+ccloud-jdbc-incremental-timestamp-source:
+	curl -X PUT --data @connectors/ccloud/jdbc-incremental-timestamp-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-incremental-timestamp-source/config | jq
+
+ccloud-jdbc-sink:
+	curl -X PUT --data @connectors/ccloud/jdbc-sink.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-sink/config | jq
+
+ccloud-get-connectors:
+	curl http://localhost:8083/connectors/ | jq
+
+ccloud-remove-connector:
+	curl -X DELETE http://localhost:8083/connectors/| jq
+
+
+ccloud-perf: ccloud-pre
+	confluent kafka topic create demo-test-topic
+
+# Below are perf test commands. If you want to send some data to the CC cluster for monitoring without deploying a connector, use this
 
 perf-producer:
 	kafka-producer-perf-test \
 		--producer-props bootstrap.servers=${CCLOUD_BOOTSTRAP_SERVERS} \
 		--topic demo-test-topic \
 		--num-records 1000000 --record-size 1000 --throughput 500 \
-		--producer.config perf/client.properties
+		--producer.config perf/ccloud.properties
 
 perf-producer-throughput:
 	kafka-producer-perf-test \

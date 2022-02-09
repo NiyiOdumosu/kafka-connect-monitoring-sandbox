@@ -1,28 +1,21 @@
 # Kafka Connect Monitoring Sandbox
 
-* 
-* Kafka to RabbitMQ
-* Transforming XML payload to schema-based formats
-* Kafka to AWS Lambda
+
+The purpose of this repository is to provide a quick bootstrap way to set up Kafka Connect with Confluent Platform and Confluent Cloud. In addition, it offers monitoring services through Prometheus and Grafana for both Confluent Platform components and Confluent Cloud. You can also configure alerting for your sandbox through AlertManager to test out a fully functional APM scenarios. 
 
 ## Architecture
 
-![ingestion](./docs/img/kafka-ingestion.png)
-
-![consumers](./docs/img/kafka-consumers.png)
-
-## How to run
-
-### Local deployment
+![architecture](./docs/img/architecture.png)
+## Sandbox Setup
 
 Required software:
 
 * IDE (e.g. Intellij)
-* JDK 14
+* JDK 11
 * Docker, Docker Compose
 * Make
 
-0. Download Kafka Connectors into `connector-plugins`:
+A. Download Kafka Connectors into `connector-plugins`: 
 
 ```shell script
 make connector-download
@@ -30,93 +23,39 @@ make connector-download
 
 or go to [Confluent Hub](https://hub.confluent.io) to download connectors manually.
 
-1. Start [Docker Compose](local.yml)
-
-```shell script
-make local-up
-```
-
-2. Create topics with [Kafka Topology Builder] ([topology](./topologies/local.yml))
-
-```shell script
-make local-topology
-```
-
-
-5. Produce some data running a Kafka producer: 
-
-```shell script
-make local-producer
-```
-
-6. Check events are found in RabbitMQ. Go to RabbitMQ Console and get messages from test queue:
-
-![RabbitMQ queue](./docs/img/rabbit-queue.png)
-
-![RabbitMQ message](./docs/img/rabbit-message.png)
-
-7. To continue with the data flow, start streams application to translate XML into schema-based formats:
-
-```shell script
-make local-streams
-```
-
-8. Deploy a lambda function that prints out incoming payload:
-
-> using Hello world template
-
-![AWS Lambda function](./docs/img/lambda.png)
-
-9. Deploy connectors to AWS Lambda to consume Avro, plain JSON, and JSON Schema based messages in a AWS Lambda function: 
-
-```shell script
-make connectors-awslambda
-```
-
-10. Check that messages are logged, and validate payloads:
-
-![Avro message](./docs/img/lambda-avro.png)
-
-![JSON Schema message](./docs/img/lambda-json-schema.png)
-
-![plain JSON message](./docs/img/lambda-json.png)
-
-To produce more input events:
-
-```shell script
-make local-producer
-```
 
 ### Confluent Cloud
 
 #### Credentials
 
-Create an `env` file ([template](./env.template)) with the Confluent Cloud IDs and API Keys:
+A. Create an `env` file ([template](./env.template)) with the Confluent Cloud IDs and API Keys:
 
 - Get Environment ID and Kafka Cluster ID via http://confluent.cloud or CLI:
 
 ```shell script
-ccloud environment list
-ccloud kafka cluster list
+confluent login 
+confluent environment list
+confluent kafka cluster list
 ```
 
-and set values on `env` file.
+and set `CCLOUD_ENV` & `CCLOUD_CLUSTER` values in the `env` file.
 
-Then describe your Kafka cluster to get the bootstrap servers URL:
+B. Then describe your Kafka cluster to get the bootstrap servers URL:
 
 ```shell script
-ccloud kafka cluster describe ${CCLOUD_CLUSTER}
+confluent kafka cluster describe ${CCLOUD_CLUSTER}
 ```
 
-Similarly, enable Schema Registry in your environment, and get the details:
+C. Similarly, enable Schema Registry in your environment, and get the details:
 
 ```shell script
-ccloud schema-registry cluster describe
+confluent schema-registry cluster describe
 ```
+and set `CCLOUD_SR` & `CCLOUD_SR_URL` values in the `env` file.
 
-Once IDs are defined, create API Keys:
+D. Once IDs are defined, create API Keys:
 
-1. Create API Keys for Topology Builder:
+ Create API Keys for Topology Builder:
 
 ```shell script
 make ccloud-topologybuilder-api-keys
@@ -124,23 +63,25 @@ make ccloud-topologybuilder-api-keys
 
 and set values in [config file](./topologies/ccloud.properties) ([template](./topologies/ccloud.properties.template))
 
-2. Create API Keys for CCloud Exporter (Monitoring):
+ Create API Keys for CCloud Exporter (Monitoring):
 
 ```shell script
 make ccloud-exporter-api-keys
 ```
 
-and set values on `env` file.
+and set `CCLOUD_EXPORTER_API_KEY` & `CCLOUD_EXPORTER_API_SECRET` values in the `env` file.
 
-3. Create API Keys for Kafka Connect:
+ Create API Keys for Kafka Connect:
 
 ```shell script
 make ccloud-connect-api-keys
 ```
 
+and set `CCLOUD_CONNECT_API_KEY` &`CCLOUD_CONNECT_API_SECRET` values in the `env` file.
+
 and set values on `env` file.
 
-4. Create API Keys for Applications:
+ Create API Keys for Applications:
 
 Create Service Account:
 
@@ -148,9 +89,9 @@ Create Service Account:
 make ccloud-app-service-account
 ```
 
-and save ID on `env` file.
+and save ID as `CCLOUD_SERVICE_ACCOUNT` in the `env` file.
 
-Create ACLs for Service Account:
+E. Create ACLs for Service Account:
 
 ```shell script
 make ccloud-app-acl
@@ -162,50 +103,135 @@ and finally create API Keys for the applications:
 make ccloud-app-api-key
 ```
 
-and set values on `env` file.
+and set values on `CCLOUD_API_KEY` & `CCLOUD_API_SECRET` `env` file.
 
-#### Run Demo
+#### Run Self-Managed Connectors to Confluent Cloud
 
-1. Start [Docker Compose](docker-compose.yml)
-
-```shell script
-make ccloud-up
-```
-
-2. Create topics with Topology Builder ([topology](./topologies/ccloud.yml))
+G. You can create topics with Topology Builder ([topology](./topologies/ccloud.yml))
 
 ```shell script
 make ccloud-topology
 ```
 
-3. Prepare RabbitMQ with exchange and queue:
+OR 
 
+You can create topics with the Confluent CLI:
 ```shell script
-make rabbitmq
+make ccloud-topic
 ```
 
-4. Deploy RabbitMQ connector:
+H. Deploy Datagen Connectors:
 
 ```shell script
-make ccloud-connector-rabbitmq
+make ccloud-datagen-users
 ```
 
-5. Deploy Kafka Streams application to process raw XMLs:
-
 ```shell script
-make ccloud-streams
+make ccloud-datagen-users-schema
+```
+I. Deploy ORACLE JDBC Connectors:
+```shell script
+make ccloud-jdbc-bulk-mode-source
 ```
 
-6. Deploy Kafka Connectors for AWS Lambda:
+```shell script
+make ccloud-jdbc-incremental-mode-source
+```
 
 ```shell script
-make ccloud-connector-awslambda
+make ccloud-jdbc-timestamp-mode-source
+```
+
+```shell script
+make ccloud-jdbc-timestamp-mode-source
 ```
 
 Finally, to monitor CCloud Cluster: go to Grafana <http://localhost:3000> and check metrics:
 
-![grafana](./docs/img/grafana.png)
+![grafana](./docs/img/grafana-ccloud.png)
+
+
+### Local Confluent Platform deployment
+
+B. Start [Docker Compose](docker-compose.yml)
+
+Verify that you have the env var $CP_VERSION set to the preferred CP version first.
+
+```shell script
+make up
+```
+
+ 
+C.  You can create topics with [Kafka Topology Builder] ([topology](./topologies/local.yml))
+
+```shell script
+make local-topology
+```
+
+OR 
+
+You can create topics with the kafka-utility command line:
+```shell script
+make local-topic
+```
+
+D. Deploy one of the Datagen connectors: 
+
+```shell script
+make local-datagen-commercials
+```
+```shell script
+make local-datagen-inventory
+```
+
+E. Deploy MySQL JDBC connectors:
+```shell script
+make local-jdbc-mysql
+```
+```shell script
+make local-jdbc-mysql-custom-query
+```
+```shell script
+make local-jdbc-sink
+```
+
+F. View the connector metrics and Kafka broker metrics on Grafana
+
+Visit http://localhost:3000/
+
+Go to the Kafka Connect dashboard to see the connector metrics
+
+![grafana](./docs/img/kafka-connect-cluster.png)
+
+
+
+
+## Monitoring & Alerting
+
+To configure alerting, visit the alertmanager directory under the root directory of this project. One can set up the SMTP server in `alertmanager.yml`. Currently, mailhog is the SMTP server that alertmanager is using for notifications. 
+
+Custom alerts can be added in PromQL format to the `alertrules.yml` file in the alertmanager directory. Can visit the alerts in the UI at <http://localhost:9093>
+![grafana](./docs/img/alertmanager.png)
+
+
+Prometheus has alertmanager set up as its alerting target. Any metrics that have an alert threshold applied to it, will trigger an alert if that threshold is crossed and send it out to the alert notifications.
+
+Alert notifications can be found in the mailhog UI at <http://localhost:8025>
+
+![grafana](./docs/img/mailhog1.png)
+
+## How to Add Connectors
+If you want to add a connector to this sandbox to test it out and see how it can be monitored, you can do so by doing the following.
+
+- If the desired connector's plugin does not come with the Kafka Connect cluster, download and install the jar in the `connector-plugins/` folder.
+
+- Once the plugin has been added, create the connector config file and place it in either the `ccloud` or `local` directory depending on which cluster you want to read/write the data to.
+
+- Deploy the newly added connector. Feel free to add the curl command to the Makefile to easily resuse it for the future.
+
 
 ## References
 
 * Topology Builder support for CCloud: <https://github.com/purbon/kafka-topology-builder/issues/10>
+
+* For a quick reference on what connector-configs should look like, visit the [examples](https://github.com/confluentinc/kafka-docker-playground/tree/master/connect) github repo. Here you can find examples of almost all the open source supported connect configs. 
