@@ -28,7 +28,7 @@ down:
 	docker-compose down --remove-orphans
 
 local-topology:
-	docker-compose exec topology-builder kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
+	docker-compose exec julie-ops julie-ops.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
 
 make local-topic:
 	kafka-topics --create --topic test1 --bootstrap-server kafka1:19092
@@ -68,7 +68,7 @@ ccloud-exporter-api-key: ccloud-pre
 	ccloud api-key create --resource cloud
 
 ccloud-topology:
-	docker-compose exec topology-builder kafka-topology-builder.sh \
+	docker-compose exec julie-ops kafka-topology-builder.sh \
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig /topologies/ccloud.properties \
 		--topology /topologies/ccloud.yml
