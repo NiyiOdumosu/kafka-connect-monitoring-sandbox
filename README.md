@@ -210,7 +210,7 @@ If you want to add a connector to this sandbox to test it out and see how it can
 
 - Once the plugin has been added, create the connector config file and place it in either the `ccloud` or `local` directory depending on which cluster you want to read/write the data to.
 
-- Deploy the newly added connector. Feel free to add the curl command to the Makefile to easily resuse it for the future.
+- Deploy the newly added connector. Feel free to add the curl command to the Makefile to easily reuse it for the future.
 
 
 ## References
