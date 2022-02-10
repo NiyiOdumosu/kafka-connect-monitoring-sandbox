@@ -1,6 +1,5 @@
 # Kafka Connect Monitoring Sandbox
 
-
 The purpose of this repository is to provide a quick bootstrap way to set up Kafka Connect with Confluent Platform and Confluent Cloud. In addition, it offers monitoring services through Prometheus and Grafana for both Confluent Platform components and Confluent Cloud. You can also configure alerting for your sandbox through AlertManager to test out a fully functional alerts. 
 
 ## Architecture
