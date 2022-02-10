@@ -48,6 +48,7 @@ services:
     volumes:
       - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
       - ./sasl-plain/kafka_jaas.conf:/etc/kafka/kafka_jaas.conf
+
   schema-registry:
     image: confluentinc/cp-schema-registry:${CP_VERSION}
     ports:
@@ -55,68 +56,67 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:19092
-  ## RabbitMQ
 
   # Connectors
 
   ## Kafka Connect cluster Pointed to Confluent Cloud
-    ## Kafka Connect cluster
-    connect1:
-      image: confluentinc/cp-kafka-connect:${CP_VERSION}
-      container_name: connect1
-      ports:
-        - 8083:8083
-        - 5083:5083
-      environment:
-        CONNECT_BOOTSTRAP_SERVERS: $CCLOUD_BOOTSTRAP_SERVERS
-        CONNECT_GROUP_ID: "connect"
-        CONNECT_CONFIG_STORAGE_TOPIC: demo-connect-configs
-        CONNECT_OFFSET_STORAGE_TOPIC: demo-connect-offsets
-        CONNECT_STATUS_STORAGE_TOPIC: demo-connect-status
-        CONNECT_REPLICATION_FACTOR: 3
-        CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 3
-        CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 3
-        CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 3
-        CONNECT_OFFSET_STORAGE_PARTITIONS: 3
+  ## Kafka Connect cluster
+  connect1:
+    image: confluentinc/cp-kafka-connect:${CP_VERSION}
+    container_name: connect1
+    ports:
+      - 8083:8083
+      - 5083:5083
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: $CCLOUD_BOOTSTRAP_SERVERS
+      CONNECT_GROUP_ID: "connect"
+      CONNECT_CONFIG_STORAGE_TOPIC: demo-connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: demo-connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: demo-connect-status
+      CONNECT_REPLICATION_FACTOR: 3
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 3
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 3
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 3
+      CONNECT_OFFSET_STORAGE_PARTITIONS: 3
 
-        CONNECT_SECURITY_PROTOCOL: SASL_SSL
-        CONNECT_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
-        CONNECT_SASL_MECHANISM: PLAIN
-        CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
+      CONNECT_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
+      CONNECT_SASL_MECHANISM: PLAIN
+      CONNECT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
 
-        CONNECT_REST_ADVERTISED_HOST_NAME: localhost
-        CONNECT_REST_PORT: 8083
-        CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
-        CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-        CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-        CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-        CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: $CCLOUD_SR_URL
-        CONNECT_VALUE_CONVERTER_BASIC_AUTH_CREDENTIALS_SOURCE: USER_INFO
-        CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: "$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET"
+      CONNECT_REST_ADVERTISED_HOST_NAME: localhost
+      CONNECT_REST_PORT: 8083
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: $CCLOUD_SR_URL
+      CONNECT_VALUE_CONVERTER_BASIC_AUTH_CREDENTIALS_SOURCE: USER_INFO
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: "$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET"
 
-        # Connect producer
-        CONNECT_PRODUCER_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
-        CONNECT_PRODUCER_SECURITY_PROTOCOL: SASL_SSL
-        CONNECT_PRODUCER_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
-        CONNECT_PRODUCER_SASL_MECHANISM: PLAIN
-        CONNECT_PRODUCER_REQUEST_TIMEOUT_MS: "20000"
-        CONNECT_PRODUCER_RETRY_BACKOFF_MS: "500"
-        # Connect consumer
-        CONNECT_CONSUMER_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
-        CONNECT_CONSUMER_SECURITY_PROTOCOL: SASL_SSL
-        CONNECT_CONSUMER_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
-        CONNECT_CONSUMER_SASL_MECHANISM: PLAIN
-        CONNECT_CONSUMER_REQUEST_TIMEOUT_MS: "20000"
-        CONNECT_CONSUMER_RETRY_BACKOFF_MS: "500"
-        KAFKA_CONNECT_CUB_KAFKA_TIMEOUT: "1"
-        # connect logs
+      # Connect producer
+      CONNECT_PRODUCER_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
+      CONNECT_PRODUCER_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_PRODUCER_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
+      CONNECT_PRODUCER_SASL_MECHANISM: PLAIN
+      CONNECT_PRODUCER_REQUEST_TIMEOUT_MS: "20000"
+      CONNECT_PRODUCER_RETRY_BACKOFF_MS: "500"
+      # Connect consumer
+      CONNECT_CONSUMER_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
+      CONNECT_CONSUMER_SECURITY_PROTOCOL: SASL_SSL
+      CONNECT_CONSUMER_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule   required username=\"$CCLOUD_API_KEY\"   password=\"$CCLOUD_API_SECRET\";"
+      CONNECT_CONSUMER_SASL_MECHANISM: PLAIN
+      CONNECT_CONSUMER_REQUEST_TIMEOUT_MS: "20000"
+      CONNECT_CONSUMER_RETRY_BACKOFF_MS: "500"
+      KAFKA_CONNECT_CUB_KAFKA_TIMEOUT: "1"
+      # connect logs
 
-        CONNECT_PLUGIN_PATH: /usr/share/java,/connector-plugins
-        KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-connect-v2.yml"
-        KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote.port=5084 -Dcom.sun.management.jmxremote.rmi.port=5084 -Dcom.sun.management.jmxremote.local.only=false"
-      volumes:
-        - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
-        - ./connector-plugins:/connector-plugins
+      CONNECT_PLUGIN_PATH: /usr/share/java,/connector-plugins
+      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-connect-v2.yml"
+      KAFKA_JMX_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.host=127.0.0.1 -Dcom.sun.management.jmxremote.port=5084 -Dcom.sun.management.jmxremote.rmi.port=5084 -Dcom.sun.management.jmxremote.local.only=false"
+    volumes:
+      - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
+      - ./connector-plugins:/connector-plugins
 
 
   ## Kafka Connect cluster Pointed to Confluent Platform
@@ -150,13 +150,15 @@ services:
       - ./aws/config:/root/.aws/config
 
   # CICD
-  topology-builder:
+  julie-ops:
     image: purbon/kafka-topology-builder:latest
+    container_name: julie-ops
     command: /bin/bash
     stdin_open: true
     tty: true
     volumes:
       - ./topologies:/topologies
+
   # Local database
   mysql:
     image: mysql
@@ -192,19 +194,19 @@ services:
     volumes:
       - ./prometheus-jmx-exporter:/etc/prometheus
 
-    mailhog:
-      image: mailhog/mailhog
-      container_name: prometheus
-      logging:
-        driver: 'none'  # disable saving logs
-      ports:
-        - 1025:1025 # smtp server
-        - 8025:8025 # web ui
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
 
-    alertmanager:
-      image: prom/alertmanager:v0.21.0
-      container_name: prometheus
-      ports:
-        - 9093:9093
-      volumes:
-        - ./alertmanager:/etc/alertmanager
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    container_name: alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager:/etc/alertmanager

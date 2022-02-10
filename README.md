@@ -1,7 +1,7 @@
 # Kafka Connect Monitoring Sandbox
 
 
-The purpose of this repository is to provide a quick bootstrap way to set up Kafka Connect with Confluent Platform and Confluent Cloud. In addition, it offers monitoring services through Prometheus and Grafana for both Confluent Platform components and Confluent Cloud. You can also configure alerting for your sandbox through AlertManager to test out a fully functional APM scenarios. 
+The purpose of this repository is to provide a quick bootstrap way to set up Kafka Connect with Confluent Platform and Confluent Cloud. In addition, it offers monitoring services through Prometheus and Grafana for both Confluent Platform components and Confluent Cloud. You can also configure alerting for your sandbox through AlertManager to test out a fully functional alerts. 
 
 ## Architecture
 
@@ -55,14 +55,6 @@ and set `CCLOUD_SR` & `CCLOUD_SR_URL` values in the `env` file.
 
 D. Once IDs are defined, create API Keys:
 
- Create API Keys for Topology Builder:
-
-```shell script
-make ccloud-topologybuilder-api-keys
-```
-
-and set values in [config file](./topologies/ccloud.properties) ([template](./topologies/ccloud.properties.template))
-
  Create API Keys for CCloud Exporter (Monitoring):
 
 ```shell script
@@ -107,20 +99,21 @@ and set values on `CCLOUD_API_KEY` & `CCLOUD_API_SECRET` `env` file.
 
 #### Run Self-Managed Connectors to Confluent Cloud
 
-G. You can create topics with Topology Builder ([topology](./topologies/ccloud.yml))
-
-```shell script
-make ccloud-topology
-```
-
-OR 
-
-You can create topics with the Confluent CLI:
+G. You can create topics with the Confluent CLI:
 ```shell script
 make ccloud-topic
 ```
 
-H. Deploy Datagen Connectors:
+H. Start [Docker Compose](docker-compose.yml)
+
+Verify that you have the env var $CP_VERSION set to the preferred CP version first.
+
+```shell script
+make up
+```
+
+
+I. Deploy Datagen Connectors:
 
 ```shell script
 make ccloud-datagen-users
@@ -129,7 +122,7 @@ make ccloud-datagen-users
 ```shell script
 make ccloud-datagen-users-schema
 ```
-I. Deploy ORACLE JDBC Connectors:
+J. Deploy MYSQL JDBC Connectors:
 ```shell script
 make ccloud-jdbc-bulk-mode-source
 ```
@@ -153,29 +146,14 @@ Finally, to monitor CCloud Cluster: go to Grafana <http://localhost:3000> and ch
 
 ### Local Confluent Platform deployment
 
-B. Start [Docker Compose](docker-compose.yml)
-
-Verify that you have the env var $CP_VERSION set to the preferred CP version first.
-
-```shell script
-make up
-```
 
  
-C.  You can create topics with [Kafka Topology Builder] ([topology](./topologies/local.yml))
-
-```shell script
-make local-topology
-```
-
-OR 
-
-You can create topics with the kafka-utility command line:
+A. You can create topics with the kafka-utility command line:
 ```shell script
 make local-topic
 ```
 
-D. Deploy one of the Datagen connectors: 
+B. Deploy one of the Datagen connectors: 
 
 ```shell script
 make local-datagen-commercials
@@ -184,7 +162,7 @@ make local-datagen-commercials
 make local-datagen-inventory
 ```
 
-E. Deploy MySQL JDBC connectors:
+C. Deploy MySQL JDBC connectors:
 ```shell script
 make local-jdbc-mysql
 ```
@@ -195,18 +173,23 @@ make local-jdbc-mysql-custom-query
 make local-jdbc-sink
 ```
 
-F. View the connector metrics and Kafka broker metrics on Grafana
-
-Visit http://localhost:3000/
-
-Go to the Kafka Connect dashboard to see the connector metrics
-
-![grafana](./docs/img/kafka-connect-cluster.png)
 
 
 
 
 ## Monitoring & Alerting
+
+You can view the connector metrics and Kafka broker metrics on Grafana
+
+Visit http://localhost:3000/
+
+* Username: `admin`
+* Password: `admin`
+
+Go to the Kafka Connect dashboard to see the connector metrics
+
+![grafana](./docs/img/kafka-connect-cluster.png)
+
 
 To configure alerting, visit the alertmanager directory under the root directory of this project. One can set up the SMTP server in `alertmanager.yml`. Currently, mailhog is the SMTP server that alertmanager is using for notifications. 
 
@@ -231,7 +214,5 @@ If you want to add a connector to this sandbox to test it out and see how it can
 
 
 ## References
-
-* Topology Builder support for CCloud: <https://github.com/purbon/kafka-topology-builder/issues/10>
 
 * For a quick reference on what connector-configs should look like, visit the [examples](https://github.com/confluentinc/kafka-docker-playground/tree/master/connect) github repo. Here you can find examples of almost all the open source supported connect configs. 

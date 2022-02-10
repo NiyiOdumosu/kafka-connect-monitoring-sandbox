@@ -28,7 +28,7 @@ down:
 	docker-compose down --remove-orphans
 
 local-topology:
-	docker-compose exec topology-builder kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
+	docker-compose exec julie-ops kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
 
 make local-topic:
 	kafka-topics --create --topic test1 --bootstrap-server kafka1:19092
@@ -45,7 +45,7 @@ local-jdbc-mysql:
 	curl -X PUT --data @connectors/local/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql/config | jq
 
 local-jdbc-mysql-custom-query:
-	curl -X PUT --data @connectors/local/oracle-sink.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql-custom-query/config | jq
+	curl -X PUT --data @connectors/local/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql-custom-query/config | jq
 
 local-jdbc-sink:
 	curl -X PUT --data @connectors/ccloud/jdbc-sink-schema.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-sink-schema/config | jq
@@ -68,7 +68,7 @@ ccloud-exporter-api-key: ccloud-pre
 	ccloud api-key create --resource cloud
 
 ccloud-topology:
-	docker-compose exec topology-builder kafka-topology-builder.sh \
+	docker-compose exec julie-ops kafka-topology-builder.sh \
 		--brokers ${CCLOUD_BOOTSTRAP_SERVERS} \
 		--clientConfig /topologies/ccloud.properties \
 		--topology /topologies/ccloud.yml
@@ -80,9 +80,6 @@ ccloud-pre:
 ccloud-connect-api-key: ccloud-pre
 	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Cloud API-Key for Connect Monitoring Demo"
 	confluent api-key create --resource ${CCLOUD_SR} --description "Cloud API-Key for Connect Monitoring Demo"
-
-ccloud-topologybuilder-api-key: ccloud-pre
-	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-service-account: ccloud-pre
 	confluent service-account create connect-sandbox --description "Connect Monitoring PoC Topology Builder"
@@ -110,6 +107,13 @@ ccloud-datagen-users:
 
 ccloud-datagen-users-schema:
 	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users-schema/config | jq
+
+ccloud-jdbc-mysql:
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql/config | jq
+
+ccloud-jdbc-mysql-custom-query:
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql-custom-query/config | jq
+
 
 ccloud-jdbc-bulk-mode-source:
 	curl -X PUT --data @connectors/ccloud/jdbc-bulk-mode-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-bulk-mode-source/config | jq
