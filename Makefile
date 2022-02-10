@@ -28,7 +28,7 @@ down:
 	docker-compose down --remove-orphans
 
 local-topology:
-	docker-compose exec julie-ops julie-ops.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
+	docker-compose exec julie-ops kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
 
 make local-topic:
 	kafka-topics --create --topic test1 --bootstrap-server kafka1:19092
@@ -80,9 +80,6 @@ ccloud-pre:
 ccloud-connect-api-key: ccloud-pre
 	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Cloud API-Key for Connect Monitoring Demo"
 	confluent api-key create --resource ${CCLOUD_SR} --description "Cloud API-Key for Connect Monitoring Demo"
-
-ccloud-topologybuilder-api-key: ccloud-pre
-	confluent api-key create --resource ${CCLOUD_CLUSTER} --description "Connect Monitoring PoC Topology Builder"
 
 ccloud-app-service-account: ccloud-pre
 	confluent service-account create connect-sandbox --description "Connect Monitoring PoC Topology Builder"
