@@ -129,7 +129,7 @@ make ccloud-datagen-users
 ```shell script
 make ccloud-datagen-users-schema
 ```
-I. Deploy ORACLE JDBC Connectors:
+I. Deploy MYSQL JDBC Connectors:
 ```shell script
 make ccloud-jdbc-bulk-mode-source
 ```
@@ -195,18 +195,23 @@ make local-jdbc-mysql-custom-query
 make local-jdbc-sink
 ```
 
-F. View the connector metrics and Kafka broker metrics on Grafana
-
-Visit http://localhost:3000/
-
-Go to the Kafka Connect dashboard to see the connector metrics
-
-![grafana](./docs/img/kafka-connect-cluster.png)
 
 
 
 
 ## Monitoring & Alerting
+
+You can view the connector metrics and Kafka broker metrics on Grafana
+
+Visit http://localhost:3000/
+
+Username: admin
+Password: admin
+
+Go to the Kafka Connect dashboard to see the connector metrics
+
+![grafana](./docs/img/kafka-connect-cluster.png)
+
 
 To configure alerting, visit the alertmanager directory under the root directory of this project. One can set up the SMTP server in `alertmanager.yml`. Currently, mailhog is the SMTP server that alertmanager is using for notifications. 
 
