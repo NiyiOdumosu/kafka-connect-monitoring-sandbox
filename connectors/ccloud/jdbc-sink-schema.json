@@ -1,0 +1,23 @@
+ {
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "value.converter.schemas.enable": "true",
+    "value.converter.schema.registry.url": "${CCLOUD_SR_URL}",
+    "value.converter.basic.auth.user.info": "${CCLOUD_SR_API_KEY}:${CCLOUD_SR_API_SECRET}",
+    "value.converter.basic.auth.credentials.source": "USER_INFO",
+    "topics": "mysql-customers",
+    "delete.enabled": "false",
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "name": "jdbc-sink-schema",
+    "connection.url": "jdbc:mysql://mysql:3306/db?allowPublicKeyRetrieval=true&&useSSL=false",
+    "connection.user": "user",
+    "connection.password": "changeme",
+    "db.name": "db",
+    "ssl.mode": "disabled",
+    "insert.mode": "INSERT",
+    "db.timezone": "UTC",
+    "auto.create": "true",
+    "auto.evolve": "true",
+    "batch.sizes": "100000",
+    "tasks.max": "1"
+}

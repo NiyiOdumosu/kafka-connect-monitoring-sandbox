@@ -1,0 +1,16 @@
+{
+  "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+  "tasks.max": "1",
+  "connection.url": "jdbc:mysql://mysql:3306/db?allowPublicKeyRetrieval=true&&useSSL=false",
+  "connection.user": "user",
+  "connection.password": "changeme",
+  "table.whitelist": "orders",
+  "mode": "timestamp+incrementing",
+  "topic.creation.enable": "true",
+  "topic.creation.default.replication.factor": 3,
+  "topic.creation.default.partitions": 3,
+  "incrementing.column.name": "ID",
+  "timestamp.column.name": "order_date",
+  "validate.non.null": "false"
+
+}
