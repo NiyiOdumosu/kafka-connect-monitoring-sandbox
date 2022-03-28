@@ -1,0 +1,16 @@
+{
+  "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+  "tasks.max": "1",
+  "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+  "value.converter.schemas.enable": "false",
+  "connection.url": "jdbc:mysql://mysql:3306/db?allowPublicKeyRetrieval=true&useSSL=false",
+  "connection.user": "user",
+  "connection.password": "changeme",
+  "table.whitelist": "customers",
+  "mode": "bulk",
+  "topic.prefix": "BULK_",
+  "topic.creation.enable": "true",
+  "topic.creation.default.replication.factor": 3,
+  "topic.creation.default.partitions": 3
+
+}

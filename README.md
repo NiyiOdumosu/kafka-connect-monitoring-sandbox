@@ -16,11 +16,7 @@ Required software:
 
 A. Download Kafka Connectors into `connector-plugins`: 
 
-```shell script
-make connector-download
-```
-
-or go to [Confluent Hub](https://hub.confluent.io) to download connectors manually.
+Go to [Confluent Hub](https://hub.confluent.io) to download any needed connectors and add it to the `connector-plugins/` directory.
 
 
 ### Confluent Cloud

@@ -1,0 +1,14 @@
+{
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "tasks.max": "1",
+    "connection.url": "jdbc:mysql://mysql:3306/db?allowPublicKeyRetrieval=true&useSSL=false",
+    "connection.user": "user",
+    "connection.password": "changeme",
+    "mode": "bulk",
+    "topic.prefix": "customers-orders",
+    "topic.creation.groups": "mysql*",
+    "topic.creation.default.replication.factor": 3,
+    "topic.creation.default.partitions": 3,
+    "query": "select * from customers c INNER JOIN orders o ON o.customer_id = c.id where o.customer_id = c.id;"
+}
+

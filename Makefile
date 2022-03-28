@@ -6,7 +6,7 @@ connector-download:
 	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-jdbc/versions/10.2.0/confluentinc-kafka-connect-jdbc-10.3.2.zip
 	unzip confluentinc-kafka-connect-jdbc-10.3.2.zip -d connector-plugins
 	rm confluentinc-kafka-connect-jdbc-10.3.2.zip
-	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-datagen/versions/0.5.0/confluentinc-kafka-connect-datagen-0.5.3.zip
+	wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-datagen/versions/0.5.3/confluentinc-kafka-connect-datagen-0.5.3.zip
 	unzip confluentinc-kafka-connect-datagen-0.5.3.zip -d connector-plugins
 	rm confluentinc-kafka-connect-datagen-0.5.3.zip
 
@@ -22,6 +22,7 @@ up:
 	CCLOUD_SR_URL=${CCLOUD_SR_URL} \
 	CCLOUD_SR_API_KEY=${CCLOUD_CONNECT_SR_API_KEY} \
 	CCLOUD_SR_API_SECRET=${CCLOUD_CONNECT_SR_API_SECRET} \
+	CP_VERSION=${CP_VERSION} \
 	docker-compose up -d
 
 down:
@@ -105,14 +106,17 @@ ccloud-topic: ccloud-pre
 ccloud-datagen-users:
 	curl -X PUT --data @connectors/ccloud/datagen-users.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users/config | jq
 
+ccloud-dbz:
+	curl -X PUT --data @connectors/ccloud/dbz-sqlserver.json -H "Content-type: application/json" http://localhost:8084/connectors/dbz-sqlserver/config | jq
+
 ccloud-datagen-users-schema:
-	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users-schema/config | jq
+	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8084/connectors/datagen-users-schema/config | jq
 
 ccloud-jdbc-mysql:
-	curl -X PUT --data @connectors/ccloud/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql/config | jq
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql/config | jq
 
 ccloud-jdbc-mysql-custom-query:
-	curl -X PUT --data @connectors/ccloud/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql-custom-query/config | jq
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql-custom-query/config | jq
 
 
 ccloud-jdbc-bulk-mode-source:

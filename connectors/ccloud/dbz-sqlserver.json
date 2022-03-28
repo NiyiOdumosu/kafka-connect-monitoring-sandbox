@@ -1,0 +1,20 @@
+{
+  "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+  "database.hostname": "dbzui-db-sqlserver",
+  "database.port": "1433",
+  "database.server.name": "servername",
+  "database.user": "sa",
+  "database.password": "Password!",
+  "database.instance": "MSSQLSERVER",
+  "database.dbname" : "testDB",
+  "database.history.kafka.topic": "schema.changes.customers",
+  "database.history.kafka.bootstrap.servers": "$CCLOUD_BOOTSTRAP_SERVER",
+  "database.history.consumer.security.protocol": "SASL_SSL",
+  "database.history.consumer.ssl.endpoint.identification.algorithm": "https",
+  "database.history.consumer.sasl.mechanism": "PLAIN",
+  "database.history.consumer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$CCLOUD_API_KEY\" password=\"$CCLOUD_API_SECRET\";",
+  "database.history.producer.security.protocol": "SASL_SSL",
+  "database.history.producer.ssl.endpoint.identification.algorithm": "https",
+  "database.history.producer.sasl.mechanism": "PLAIN",
+  "database.history.producer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$CCLOUD_API_KEY\" password=\"$CCLOUD_API_SECRET\";"
+}
