@@ -142,7 +142,7 @@ services:
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "true"
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_PLUGIN_PATH: /usr/share/java,/connector-plugins
-      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5083:/opt/prometheus-jmx-exporter/kafka-connect.yaml"
+      KAFKA_OPTS: "-javaagent:/opt/prometheus-jmx-exporter/jmx_prometheus_javaagent.jar=5084:/opt/prometheus-jmx-exporter/kafka-connect.yaml"
     volumes:
       - ./prometheus-jmx-exporter:/opt/prometheus-jmx-exporter
       - ./connector-plugins:/connector-plugins
@@ -205,6 +205,6 @@ services:
     image: prom/alertmanager:v0.21.0
     container_name: alertmanager
     ports:
-      - 9093:9093
+      - 9095:9095
     volumes:
       - ./alertmanager:/etc/alertmanager
