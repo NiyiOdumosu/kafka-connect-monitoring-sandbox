@@ -3,7 +3,7 @@
     "kafka.topic": "datagen-users",
     "value.converter": "io.confluent.connect.avro.AvroConverter",
     "value.converter.schemas.enable": "true",
-    "schema.string": "{\"name\":\"usersRecord\",\"namespace\":\"com.poc.geico\",\"type\":\"record\",\"doc\":\"schema for geico poc\",\"fields\":[{\"doc\":\"register timestamp\",\"name\":\"registertime\",\"type\":\"long\"},{\"doc\":\"fake first name\",\"name\":\"firstname\",\"type\":\"string\"},{\"doc\":\"fake last name.\",\"name\":\"lastname\",\"type\":\"string\"},{\"doc\":\"MALE or FEMALE\",\"name\":\"gender\",\"type\":\"string\"}]} ",
+    "schema.string": "{\"name\":\"usersRecord\",\"namespace\":\"com.poc\",\"type\":\"record\",\"doc\":\"schema for poc\",\"fields\":[{\"doc\":\"register timestamp\",\"name\":\"registertime\",\"type\":\"long\"},{\"doc\":\"fake first name\",\"name\":\"firstname\",\"type\":\"string\"},{\"doc\":\"fake last name.\",\"name\":\"lastname\",\"type\":\"string\"},{\"doc\":\"MALE or FEMALE\",\"name\":\"gender\",\"type\":\"string\"}]} ",
     "value.converter.schema.registry.url": "${CCLOUD_SR_URL}",
     "value.converter.basic.auth.user.info": "${CCLOUD_SR_API_KEY}:${CCLOUD_SR_API_SECRET}",
     "value.converter.basic.auth.credentials.source": "USER_INFO",

@@ -1,0 +1,20 @@
+{
+  "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+  "database.hostname": "dbzui-db-sqlserver",
+  "database.port": "1433",
+  "database.server.name": "c4100c154b5b",
+  "database.user": "sa",
+  "database.password": "Password!",
+  "database.instance": "MSSQLSERVER",
+  "database.dbname" : "testDB",
+  "database.history.kafka.topic": "schema.changes.customers",
+  "database.history.kafka.bootstrap.servers": "pkc-4kgmg.us-west-2.aws.confluent.cloud:9092",
+  "database.history.consumer.security.protocol": "SASL_SSL",
+  "database.history.consumer.ssl.endpoint.identification.algorithm": "https",
+  "database.history.consumer.sasl.mechanism": "PLAIN",
+  "database.history.consumer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"QA4VCUXJQA3DUML3\" password=\"Rc2L8Tu6osT6pZF5d+jJmB8KILofzzbaNW5M6jwtknCdz2ilQy3CmG+IfvTo+NdT\";",
+  "database.history.producer.security.protocol": "SASL_SSL",
+  "database.history.producer.ssl.endpoint.identification.algorithm": "https",
+  "database.history.producer.sasl.mechanism": "PLAIN",
+  "database.history.producer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"QA4VCUXJQA3DUML3\" password=\"Rc2L8Tu6osT6pZF5d+jJmB8KILofzzbaNW5M6jwtknCdz2ilQy3CmG+IfvTo+NdT\";"
+}
