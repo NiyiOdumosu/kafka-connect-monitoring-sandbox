@@ -1,6 +1,6 @@
 {
       "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
-      "kafka.topic": "users",
+      "kafka.topic": "datagen-users",
       "quickstart": "users",
       "key.converter": "org.apache.kafka.connect.storage.StringConverter",
       "value.converter": "org.apache.kafka.connect.json.JsonConverter",

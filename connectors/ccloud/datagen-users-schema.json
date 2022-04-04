@@ -1,6 +1,6 @@
 {
     "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
-    "kafka.topic": "datagen-users",
+    "kafka.topic": "datagen-users-schema",
     "value.converter": "io.confluent.connect.avro.AvroConverter",
     "value.converter.schemas.enable": "true",
     "schema.string": "{\"name\":\"usersRecord\",\"namespace\":\"com.poc\",\"type\":\"record\",\"doc\":\"schema for poc\",\"fields\":[{\"doc\":\"register timestamp\",\"name\":\"registertime\",\"type\":\"long\"},{\"doc\":\"fake first name\",\"name\":\"firstname\",\"type\":\"string\"},{\"doc\":\"fake last name.\",\"name\":\"lastname\",\"type\":\"string\"},{\"doc\":\"MALE or FEMALE\",\"name\":\"gender\",\"type\":\"string\"}]} ",

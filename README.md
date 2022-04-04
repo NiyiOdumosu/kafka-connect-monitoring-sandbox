@@ -113,7 +113,7 @@ I. Deploy Datagen Connectors:
 ```shell script
 make ccloud-datagen-users
 ```
-
+Insert your `CCLOUD_SR_URL`, `CCLOUD_SR_API_KEY` and `CCLOUD_SR_API_SECRET` values in the `datagen-users-schema.json` file.
 ```shell script
 make ccloud-datagen-users-schema
 ```
@@ -131,7 +131,20 @@ make ccloud-jdbc-timestamp-mode-source
 ```
 
 ```shell script
-make ccloud-jdbc-timestamp-mode-source
+make ccloud-jdbc-incremental-timestamp-source
+```
+
+```shell script
+make ccloud-jdbc-mysql
+```
+
+```shell script
+make ccloud-jdbc-mysql-custom-query
+```
+
+Insert your `CCLOUD_SR_URL`, `CCLOUD_SR_API_KEY` and `CCLOUD_SR_API_SECRET` values in the `jdbc-sink-schema.json` file.
+```shell script
+make ccloud-jdbc-sink-schema
 ```
 
 Finally, to monitor CCloud Cluster: go to Grafana <http://localhost:3000> and check metrics:

@@ -8,13 +8,13 @@
   "database.instance": "MSSQLSERVER",
   "database.dbname" : "testDB",
   "database.history.kafka.topic": "schema.changes.customers",
-  "database.history.kafka.bootstrap.servers": "$CCLOUD_BOOTSTRAP_SERVER",
+  "database.history.kafka.bootstrap.servers": "pkc-2396y.us-east-1.aws.confluent.cloud:9092",
   "database.history.consumer.security.protocol": "SASL_SSL",
   "database.history.consumer.ssl.endpoint.identification.algorithm": "https",
   "database.history.consumer.sasl.mechanism": "PLAIN",
-  "database.history.consumer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$CCLOUD_API_KEY\" password=\"$CCLOUD_API_SECRET\";",
+  "database.history.consumer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"5EYGQ3DPWHVBIRFB\" password=\"3+tnuZFauJ35Cb1/IKTEKUXpnO4j6YmjXfI8qAiVtdpCKb6W3V4zPgMtgqgJtXg3\";",
   "database.history.producer.security.protocol": "SASL_SSL",
   "database.history.producer.ssl.endpoint.identification.algorithm": "https",
   "database.history.producer.sasl.mechanism": "PLAIN",
-  "database.history.producer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$CCLOUD_API_KEY\" password=\"$CCLOUD_API_SECRET\";"
+  "database.history.producer.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"5EYGQ3DPWHVBIRFB\" password=\"3+tnuZFauJ35Cb1/IKTEKUXpnO4j6YmjXfI8qAiVtdpCKb6W3V4zPgMtgqgJtXg3\";"
 }
