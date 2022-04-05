@@ -8,7 +8,7 @@
   "database.instance": "MSSQLSERVER",
   "database.dbname" : "testDB",
   "database.history.kafka.topic": "schema.changes.customers",
-  "database.history.kafka.bootstrap.servers": "pkc-2396y.us-east-1.aws.confluent.cloud:9092",
+ "database.history.kafka.bootstrap.servers": "$CCLOUD_BOOTSTRAP_SERVER",
   "database.history.consumer.security.protocol": "SASL_SSL",
   "database.history.consumer.ssl.endpoint.identification.algorithm": "https",
   "database.history.consumer.sasl.mechanism": "PLAIN",
