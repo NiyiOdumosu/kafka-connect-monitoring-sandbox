@@ -31,8 +31,8 @@ down:
 local-topology:
 	docker-compose exec julie-ops kafka-topology-builder.sh --brokers kafka1:19092 --clientConfig /topologies/local.properties --topology /topologies/local.yml
 
-make local-topic:
-	kafka-topics --create --topic test1 --bootstrap-server kafka1:19092
+local-topic:
+	kafka-topics --create --topic test1 --bootstrap-server kafka1:9092
 
 # The following commands are for connectors that are RW to the local CP cluster
 
@@ -106,18 +106,8 @@ ccloud-topic: ccloud-pre
 ccloud-datagen-users:
 	curl -X PUT --data @connectors/ccloud/datagen-users.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users/config | jq
 
-ccloud-dbz:
-	curl -X PUT --data @connectors/ccloud/dbz-sqlserver.json -H "Content-type: application/json" http://localhost:8084/connectors/dbz-sqlserver/config | jq
-
 ccloud-datagen-users-schema:
-	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8084/connectors/datagen-users-schema/config | jq
-
-ccloud-jdbc-mysql:
-	curl -X PUT --data @connectors/ccloud/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql/config | jq
-
-ccloud-jdbc-mysql-custom-query:
-	curl -X PUT --data @connectors/ccloud/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8084/connectors/jdbc-mysql-custom-query/config | jq
-
+	curl -X PUT --data @connectors/ccloud/datagen-users-schema.json -H "Content-type: application/json" http://localhost:8083/connectors/datagen-users-schema/config | jq
 
 ccloud-jdbc-bulk-mode-source:
 	curl -X PUT --data @connectors/ccloud/jdbc-bulk-mode-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-bulk-mode-source/config | jq
@@ -131,8 +121,17 @@ ccloud-jdbc-timestamp-mode-source:
 ccloud-jdbc-incremental-timestamp-source:
 	curl -X PUT --data @connectors/ccloud/jdbc-incremental-timestamp-source.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-incremental-timestamp-source/config | jq
 
+ccloud-jdbc-mysql:
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql/config | jq
+
+ccloud-jdbc-mysql-custom-query:
+	curl -X PUT --data @connectors/ccloud/jdbc-mysql-custom-query.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-mysql-custom-query/config | jq
+
 ccloud-jdbc-sink:
-	curl -X PUT --data @connectors/ccloud/jdbc-sink.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-sink/config | jq
+	curl -X PUT --data @connectors/ccloud/jdbc-sink-schema.json -H "Content-type: application/json" http://localhost:8083/connectors/jdbc-sink-schema/config | jq
+
+ccloud-dbz:
+	curl -X PUT --data @connectors/ccloud/dbz-sqlserver.json -H "Content-type: application/json" http://localhost:8083/connectors/dbz-sqlserver/config | jq
 
 ccloud-get-connectors:
 	curl http://localhost:8083/connectors/ | jq

@@ -2,14 +2,14 @@
   "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
   "tasks.max": "1",
   "connection.url": "jdbc:mysql://mysql:3306/db?user=user&password=changeme&useSSL=false",
-  "connection.user": "admin",
-  "connection.password": "",
-  "table.whitelist": "customer",
+  "connection.user": "user",
+  "connection.password": "changeme",
+  "table.whitelist": "customers",
   "mode": "incrementing",
   "topic.prefix": "INCREMENTING_",
   "topic.creation.enable": "true",
   "topic.creation.default.replication.factor": 3,
   "topic.creation.default.partitions": 3,
-  "incrementing.column.name": "ID"
+  "incrementing.column.name": "id"
 
 }

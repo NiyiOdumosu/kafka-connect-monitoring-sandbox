@@ -4,3 +4,5 @@ aws/credentials
 env
 topologies/ccloud.properties
 perf/client.properties
+.idea/
+.DS_Store

@@ -8,6 +8,7 @@
         "topic.prefix": "mysql-",
         "mode": "bulk",
         "topic.creation.groups": "mysql*",
+        "topic.creation.enable": "true",
         "topic.creation.default.replication.factor": 3,
         "topic.creation.default.partitions": 3
 }

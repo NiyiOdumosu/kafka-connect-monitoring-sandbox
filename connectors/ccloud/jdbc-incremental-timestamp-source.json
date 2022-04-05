@@ -6,10 +6,11 @@
   "connection.password": "changeme",
   "table.whitelist": "orders",
   "mode": "timestamp+incrementing",
+  "topic.prefix": "INCREMENTING_TIMESTAMP_",
   "topic.creation.enable": "true",
   "topic.creation.default.replication.factor": 3,
   "topic.creation.default.partitions": 3,
-  "incrementing.column.name": "ID",
+  "incrementing.column.name": "id",
   "timestamp.column.name": "order_date",
   "validate.non.null": "false"
 
